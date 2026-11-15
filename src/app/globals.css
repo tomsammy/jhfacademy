@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #18181b;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.couture-gradient {
+  background: linear-gradient(135deg, #4c1d95 0%, #5b21b6 55%, #6d28d9 100%);
+}
+
+.lavender-glow {
+  background: radial-gradient(
+    circle at top right,
+    rgba(237, 233, 254, 0.9) 0%,
+    rgba(245, 243, 255, 0.5) 45%,
+    #ffffff 100%
+  );
+}
