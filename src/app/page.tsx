@@ -14,6 +14,7 @@ import {
 import { ProgramCards } from "@/components/ProgramCards";
 import { TuitionCalculator } from "@/components/TuitionCalculator";
 import { LookbookGallery } from "@/components/LookbookGallery";
+import { StudentProjectsShowcase } from "@/components/StudentProjectsShowcase";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { LocationMapSection } from "@/components/LocationMapSection";
 import {
@@ -233,28 +234,39 @@ export default function HomePage() {
             {STUDENT_SPOTLIGHTS.map((item) => (
               <div
                 key={item.name}
-                className="flex flex-col justify-between rounded-3xl border border-zinc-800 bg-zinc-900/80 p-7"
+                className="flex flex-col justify-between overflow-hidden rounded-3xl border border-zinc-800 bg-zinc-900/80"
               >
-                <div>
-                  <div className="flex items-center gap-1 text-brand-gold">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-brand-gold" />
-                    ))}
+                {item.image && (
+                  <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-900">
+                    <img
+                      src={item.image}
+                      alt={`${item.name} — ${item.focus} at Julian House of Fashion Academy Ilorin`}
+                      className="h-full w-full object-cover object-top"
+                    />
                   </div>
-                  <p className="mt-4 text-sm leading-relaxed text-zinc-200">
-                    &ldquo;{item.quote}&rdquo;
-                  </p>
-                </div>
-                <div className="mt-6 border-t border-zinc-800 pt-4">
-                  <p className="font-serif text-xl font-bold text-white">
-                    {item.name}
-                  </p>
-                  <p className="text-xs font-semibold text-purple-300">
-                    {item.cohort}
-                  </p>
-                  <p className="mt-1 text-[11px] text-zinc-400">
-                    Focus: {item.focus}
-                  </p>
+                )}
+                <div className="flex flex-1 flex-col justify-between p-7">
+                  <div>
+                    <div className="flex items-center gap-1 text-brand-gold">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-4 w-4 fill-brand-gold" />
+                      ))}
+                    </div>
+                    <p className="mt-4 text-sm leading-relaxed text-zinc-200">
+                      &ldquo;{item.quote}&rdquo;
+                    </p>
+                  </div>
+                  <div className="mt-6 border-t border-zinc-800 pt-4">
+                    <p className="font-serif text-xl font-bold text-white">
+                      {item.name}
+                    </p>
+                    <p className="text-xs font-semibold text-purple-300">
+                      {item.cohort}
+                    </p>
+                    <p className="mt-1 text-[11px] text-zinc-400">
+                      Focus: {item.focus}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -291,6 +303,31 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Past Students & Final Project Pictorials */}
+      <section className="border-b border-purple-100 bg-brand-cream/40 py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand-purple ring-1 ring-purple-200">
+              <Sparkles className="h-3.5 w-3.5" />
+              Past Students &amp; Final Project Pictorials
+            </span>
+            <h2 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-5xl">
+              Garments Drafted, Stitched &amp; Presented by Our Trainees
+            </h2>
+            <p className="mt-4 text-base text-zinc-700">
+              Explore multi-angle pictorials of real final projects showcased
+              inside our Ilorin studio—switch angles directly on any card or
+              click to inspect the construction techniques and course modules
+              behind each outfit.
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <StudentProjectsShowcase limit={6} showViewAllLink />
           </div>
         </div>
       </section>

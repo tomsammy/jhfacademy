@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import React from "react";
 import Link from "next/link";
-import { BookOpen, CheckCircle2, GraduationCap, Home, FileCheck2 } from "lucide-react";
+import { BookOpen, Camera, CheckCircle2, GraduationCap, Home, FileCheck2 } from "lucide-react";
 import { ProgramCards } from "@/components/ProgramCards";
+import { StudentProjectsShowcase } from "@/components/StudentProjectsShowcase";
 import { TuitionCalculator } from "@/components/TuitionCalculator";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import {
@@ -273,6 +274,34 @@ export default function AcademyPage() {
                 Register for Full Programme →
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Past Students & Final Project Pictorial Showcase */}
+      <section
+        id="student-projects"
+        className="border-t border-purple-100 bg-white py-16 sm:py-20"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-lavender px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand-purple">
+              <Camera className="h-3.5 w-3.5" />
+              Student Outcomes &amp; Project Pictorials
+            </span>
+            <h2 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-4xl">
+              Past Students &amp; Final Project Pictorial Showcase
+            </h2>
+            <p className="mt-3 text-base text-zinc-700">
+              See the real outfits drafted, cut, sewn, and presented by our
+              trainees from Foundational, Intermediate, and Advanced cohorts in
+              Ilorin. Switch angles on any garment or click to inspect the full
+              construction breakdown.
+            </p>
+          </div>
+
+          <div className="mt-10">
+            <StudentProjectsShowcase />
           </div>
         </div>
       </section>

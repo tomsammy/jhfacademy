@@ -37,6 +37,28 @@ export interface LookbookItem {
   techniqueTag: string;
 }
 
+export interface StudentProjectAngle {
+  url: string;
+  label: string;
+}
+
+export interface StudentProjectShowcase {
+  id: string;
+  title: string;
+  studentLabel: string;
+  category:
+    | "Tailored Suits & Separates"
+    | "Color-Block & Contour Dresses"
+    | "Jumpsuits & Palazzo Sets"
+    | "Embellished & Cape Couture";
+  levelBadge: string;
+  primaryImage: string;
+  angles: StudentProjectAngle[];
+  summary: string;
+  pictorialDetails: string[];
+  modulesApplied: string[];
+}
+
 export const SITE_CONFIG = {
   name: "Julian House of Fashion Academy",
   shortName: "Julian House of Fashion",
@@ -467,59 +489,92 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
     category: "Specialised Training",
     priceNaira: 250000,
     priceFormatted: "₦250,000",
-    duration: "4 months",
-    isoDuration: "P4M",
-    level: "Specialised Menswear",
+    duration: "3–4 months",
+    isoDuration: "P3M",
+    level: "Foundational Male Fashion Design",
     badge: "Specialised Training",
     summary:
-      "Focused 4-month specialised training dedicated to bespoke menswear pattern drafting, crisp Senator wears, Agbada, tailored trousers, and formal shirts.",
+      "Structured foundational male fashion design training covering male body measurements, pattern drafting, shirts, trousers, Senator & kaftan native wear, jackets, and neat finishing.",
     curriculum: [
-      "Menswear anatomy, chest/shoulder balance & structured sleeve pitch",
-      "Senator suits, kaftans, luxury Agbada embroidery prep & placket precision",
-      "Bespoke men's pleated & flat-front trousers with welt pockets and waistband interfacing",
-      "Classic collared dress shirts, yokes, French seams & cuff tailoring",
-      "Crisp interfacing, fusing & sharp masculine pressing standards",
+      "Male Body Measurements, Proportions & Half/Full-Scale Pattern Drafting",
+      "Shirt Construction: Collar, Collar Stand, Sleeve, Cuff & Placket Development",
+      "Trouser Construction: Measurements, Styles, Waistband, Pocket & Fly",
+      "Native Wear Construction: Kaftan, Senator Wear, Collar & Pocket Details",
+      "Jacket & Outerwear Pattern Development, Lapels, Sleeves, Lining & Finishing",
     ],
     outcomes: [
-      "Construct crisp Senator outfits, Agbada, and bespoke men's trousers",
-      "Tap into Nigeria's high-demand bespoke menswear and groom's attire market",
+      "Take accurate male body measurements and draft foundational male patterns",
+      "Independently cut, construct, and finish shirts, trousers, native wear (Kaftan & Senator), and simple jackets",
     ],
     courseOutline: [
       {
-        title: "1. MENSWEAR MEASUREMENTS & BLOCK DRAFTING",
+        title: "1. MEASUREMENTS AND PATTERN DRAFTING",
         topics: [
-          "Menswear body measurement anatomy and posture balance.",
-          "Chest, shoulder slope and back-width pattern drafting.",
-          "Structured two-piece sleeve pitch and armhole balance.",
+          "Understanding and reading the tape rule.",
+          "Basic male body measurements.",
+          "Understanding male body proportions.",
+          "Basic pattern drafting techniques.",
+          "Half-scale and full-scale pattern development.",
         ],
       },
       {
-        title: "2. SENATOR SUITS, KAFTANS & AGBADA",
+        title: "2. SHIRT CONSTRUCTION",
         topics: [
-          "Senator top and traditional kaftan pattern drafting.",
-          "Crisp hidden and exposed placket construction.",
-          "Luxury Agbada cutting, neck-facing geometry & embroidery preparation.",
+          "Basic shirt pattern drafting.",
+          "Shirt variations and styles.",
+          "Collar and collar stand construction.",
+          "Sleeve and cuff construction.",
+          "Placket development.",
+          "Shirt construction and finishing.",
         ],
       },
       {
-        title: "3. BESPOKE MEN'S TROUSER CONSTRUCTION",
+        title: "3. TROUSER CONSTRUCTION",
         topics: [
-          "Flat-front and pleated menswear trouser pattern drafting.",
-          "Zipper fly shield, side slant pockets & double-welt back pockets.",
-          "Waistband interfacing, curtain lining & bespoke fitting adjustments.",
+          "Basic trouser measurements and drafting.",
+          "Trouser pattern development.",
+          "Different trouser styles and variations.",
+          "Waistband, pocket and fly construction.",
+          "Cutting, sewing and finishing.",
         ],
       },
       {
-        title: "4. FORMAL SHIRTS & FINISHING STANDARDS",
+        title: "4. NATIVE WEAR CONSTRUCTION",
         topics: [
-          "Classic two-piece collar stand, shoulder yoke & placket tailoring.",
-          "Sleeve plackets, fused cuffs & French seam shirt construction.",
-          "Sharp fusing, steam pressing & quality control for client delivery.",
+          "Basic native wear pattern drafting.",
+          "Different native wear styles.",
+          "Kaftan construction.",
+          "Senator wear construction.",
+          "Collar variations.",
+          "Pocket and design details.",
+          "Cutting and finishing techniques.",
+        ],
+      },
+      {
+        title: "5. JACKET AND OUTERWEAR",
+        topics: [
+          "Introduction to jacket construction.",
+          "Basic jacket pattern development.",
+          "Jacket collar and lapel variations.",
+          "Sleeve construction.",
+          "Lining and finishing.",
+        ],
+      },
+      {
+        title: "6. CREATIVE DETAILS AND FINISHING",
+        topics: [
+          "Pocket variations and applications.",
+          "Buttonholes and button placement.",
+          "Zipper applications.",
+          "Professional garment finishing.",
+          "Fitting and basic alterations.",
         ],
       },
     ],
     expectedOutcomeText:
-      "By the end of the 4-month Male Fashion Design track, students should be able to measure, draft, cut, fuse, assemble, and professionally press crisp Senator wears, Agbada sets, bespoke men's trousers, and tailored dress shirts.",
+      "By the end of the programme, students should be able to take male body measurements, draft basic male patterns, cut and construct shirts, trousers, native wear and simple jackets, and execute neat garment finishing.",
+    finalProject:
+      "Each student will independently draft, cut and construct selected male outfits to demonstrate the skills acquired.",
   },
 ];
 
@@ -581,7 +636,7 @@ export const LOOKBOOK_ITEMS: LookbookItem[] = [
     id: "corporate-blazers",
     title: "Structured Women's Blazers & Suits",
     category: "Blazers & Suits",
-    image: "/images/jhf-banner-showcase.png",
+    image: "/images/students/student-emerald-suit-logo.jpg",
     description:
       "Power-tailored notched-lapel blazers, two-piece trouser suits, and crisp lined office separates taught in our Advanced module and available for bespoke order.",
     techniqueTag: "Two-Piece Sleeve & Lapel Tailoring",
@@ -601,6 +656,7 @@ export const STUDENT_SPOTLIGHTS = [
   {
     name: "Designer Aishat",
     cohort: "August Batch Graduate",
+    image: "/images/students/student-emerald-suit-logo.jpg",
     quote:
       "Before joining Julian House of Fashion Academy in Ilorin, trouser pattern drafting was my biggest challenge. Working hands-on with brown pattern paper and industrial machines step by step, I now draft and sew complete outfits confidently.",
     focus: "Trouser Pattern Drafting & Garment Assembly",
@@ -608,16 +664,398 @@ export const STUDENT_SPOTLIGHTS = [
   {
     name: "Full Programme Trainee",
     cohort: "9-Month Intensive Track",
+    image: "/images/students/student-hotpink-cape-wings.jpg",
     quote:
-      "Starting from zero machine experience in Foundational Class up to constructing beaded corsets and structured blazers in Advanced Class gave me everything I needed to launch my own bespoke brand.",
+      "Starting from zero machine experience in Foundational Class up to constructing beaded corsets and structured cape silhouettes in Advanced Class gave me everything I needed to launch my own bespoke brand.",
     focus: "Foundational to Advanced Couture Progression",
   },
   {
     name: "Out-of-Town Student",
     cohort: "Academy Resident",
+    image: "/images/students/student-duo-satin-emerald.jpg",
     quote:
       "The studio accommodation option off Basin Road made relocating to Ilorin seamless. Being minutes away from the cutting tables meant extra practice hours every week.",
     focus: "Comfortable Student Accommodation & Studio Access",
+  },
+];
+
+export const STUDENT_PROJECT_SHOWCASES: StudentProjectShowcase[] = [
+  {
+    id: "hotpink-pearl-cape-dress",
+    title:
+      "Hot-Pink Pearl-Beaded Square-Neck Midi Dress with Split Cape Sleeves",
+    studentLabel: "Advanced Cohort Final Project",
+    category: "Embellished & Cape Couture",
+    levelBadge: "Advanced Couture Showcase",
+    primaryImage: "/images/students/student-hotpink-cape-wings.jpg",
+    angles: [
+      {
+        url: "/images/students/student-hotpink-cape-wings.jpg",
+        label: "Wing-Spread View",
+      },
+      {
+        url: "/images/students/student-hotpink-cape-front.jpg",
+        label: "Front Silhouette",
+      },
+      {
+        url: "/images/students/student-hotpink-cape-back.jpg",
+        label: "Back Zipper & Vent",
+      },
+    ],
+    summary:
+      "Dramatic statement midi dress engineered with floor-grazing split cape sleeves, hand-beaded pearl neckline and hem edging, and precision back waist darting.",
+    pictorialDetails: [
+      "Square-neck structured bodice hand-embellished with graduating pearl bead trim along the collar and cape edges.",
+      "Full-length open split cape sleeves drafted with balanced shoulder ease and fluid drape.",
+      "Concealed center-back zipper, crisp vertical back darts, and tailored rear walking vent shown in the back view.",
+    ],
+    modulesApplied: [
+      "Sleeve Development",
+      "Advanced Structural Design",
+      "Beadwork & Embellishment",
+      "Advanced Finishing",
+    ],
+  },
+  {
+    id: "emerald-double-breasted-suit",
+    title:
+      "Emerald Green Asymmetric Double-Breasted Blazer & Cigarette Trouser Suit",
+    studentLabel: "Intermediate & Blazer Track",
+    category: "Tailored Suits & Separates",
+    levelBadge: "Intermediate Blazer Project",
+    primaryImage: "/images/students/student-emerald-suit-logo.jpg",
+    angles: [
+      {
+        url: "/images/students/student-emerald-suit-logo.jpg",
+        label: "Full Suit at JHF Crest",
+      },
+      {
+        url: "/images/students/student-emerald-suit-closeup.jpg",
+        label: "Lapel & Belt Detail",
+      },
+      {
+        url: "/images/students/student-duo-satin-emerald.jpg",
+        label: "Studio Duo View",
+      },
+    ],
+    summary:
+      "Sharp emerald tailored two-piece suit showcasing an asymmetric crossover front closure, pearl-rimmed decorative buttons, self-fabric waist belt, and sleek cigarette trousers.",
+    pictorialDetails: [
+      "Precision notched collar stand paired with a diagonal double-breasted button wrap and structured waist tabs.",
+      "Two-piece tailored sleeves set cleanly into structured armholes with crisp interior interfacing.",
+      "High-waist slim cigarette trousers drafted without front crotch pooling or pocket gaping.",
+    ],
+    modulesApplied: [
+      "Blazer Construction",
+      "Trouser Construction",
+      "Structured Sleeves",
+    ],
+  },
+  {
+    id: "lilac-pearl-flounce-dress",
+    title:
+      "Lilac Pearl-Neckline Fitted Midi Dress with 3D Gathered Flounce Hem",
+    studentLabel: "Studio Contouring Showcase",
+    category: "Embellished & Cape Couture",
+    levelBadge: "Intermediate / Advanced",
+    primaryImage: "/images/students/student-lilac-pearl-ruffle-dress.jpg",
+    angles: [
+      {
+        url: "/images/students/student-lilac-pearl-ruffle-dress.jpg",
+        label: "Full Silhouette",
+      },
+      {
+        url: "/images/students/student-lilac-pearl-closeup.jpg",
+        label: "Pearl & Ruffle Detail",
+      },
+    ],
+    summary:
+      "Sculpted lilac midi dress featuring a mock-turtle collar lined with sewn pearls, contoured princess darting, and a voluminous gathered 3D ruffle skirt flounce.",
+    pictorialDetails: [
+      "Hand-sewn graduating pearl trim accentuating the high neckline and side cape sleeve slit.",
+      "Contoured bodice and hip paneling for smooth waist-to-hip compression and balance.",
+      "Dense gathered 3D fabric manipulation at the lower hem creating dramatic structured volume.",
+    ],
+    modulesApplied: [
+      "Advanced Dart Manipulation",
+      "Volume & Ruffle Creation",
+      "Beadwork Application",
+    ],
+  },
+  {
+    id: "diamond-patchwork-maxi",
+    title:
+      "Espresso, Black & White Geometric Diamond Patchwork Maxi Gown",
+    studentLabel: "Pattern Manipulation Showcase",
+    category: "Color-Block & Contour Dresses",
+    levelBadge: "Intermediate Pattern Project",
+    primaryImage: "/images/students/student-diamond-patchwork-gown.jpg",
+    angles: [
+      {
+        url: "/images/students/student-diamond-patchwork-gown.jpg",
+        label: "Solo Full Gown",
+      },
+      {
+        url: "/images/students/student-duo-diamond-royalblue.jpg",
+        label: "Cohort Duo View",
+      },
+    ],
+    summary:
+      "Floor-length color-blocked column gown cut from alternating espresso crepe, obsidian, and crisp ivory geometric diamond pattern panels with contrast-piped flare cuffs.",
+    pictorialDetails: [
+      "Complex style-line pattern conversion matching multi-angle diamond seams seamlessly at every junction.",
+      "Clean contrast white flat-piping framing the geometric center-front panels and bell-sleeve cuffs.",
+      "Longline sheath fit balanced with precise bust, waist, and hip dart transfers.",
+    ],
+    modulesApplied: [
+      "Advanced Dart Manipulation",
+      "Dress Pattern Development",
+      "Precision Seam Alignment",
+    ],
+  },
+  {
+    id: "royal-purple-stripe-jumpsuit",
+    title:
+      "Royal Purple & White Contrast-Stripe Wide-Leg Jumpsuit",
+    studentLabel: "Jumpsuit & Menswear/Tailoring Showcase",
+    category: "Jumpsuits & Palazzo Sets",
+    levelBadge: "Foundational / Intermediate",
+    primaryImage: "/images/students/student-purple-stripe-jumpsuit.jpg",
+    angles: [
+      {
+        url: "/images/students/student-purple-stripe-jumpsuit.jpg",
+        label: "Solo Jumpsuit Drape",
+      },
+      {
+        url: "/images/students/student-duo-purple-grey-jumpsuits.jpg",
+        label: "Duo Jumpsuit Study",
+      },
+    ],
+    summary:
+      "Statement royal purple jumpsuit featuring structured shoulder pleats, asymmetric black-and-white geometric bodice inlay, and continuous vertical white leg paneling.",
+    pictorialDetails: [
+      "Continuous vertical white contrast stripe drafted cleanly from the bodice shoulder line to the wide palazzo hem.",
+      "Structured shoulder-cap elevation balancing the asymmetric geometric neckline.",
+      "Accurate jumpsuit torso rise and crotch depth allowing effortless stride and upright drape.",
+    ],
+    modulesApplied: [
+      "Jumpsuit Construction",
+      "Sleeve Architecture",
+      "Trouser Rise & Fit",
+    ],
+  },
+  {
+    id: "white-crossover-wrap-shirt",
+    title:
+      "Crisp White Architectural Cross-Front Wrap Shirt & Charcoal Trousers",
+    studentLabel: "Shirting & Tailoring Project",
+    category: "Tailored Suits & Separates",
+    levelBadge: "Foundational Graduate",
+    primaryImage: "/images/students/student-white-crossover-shirt.jpg",
+    angles: [
+      {
+        url: "/images/students/student-white-crossover-shirt.jpg",
+        label: "Full Look at JHF Crest",
+      },
+    ],
+    summary:
+      "Crisp cotton cross-front collared blouse drafted with asymmetric pointed hem panels and long buttoned French cuffs, paired with tailored charcoal ankle trousers.",
+    pictorialDetails: [
+      "Traditional two-piece shirt collar stand converted into a clean diagonal wrap overlap with concealed lower fit.",
+      "Pointed asymmetric front hem panels interfaced for sharp crisp corners and clean under-stitching.",
+      "Balanced charcoal straight trousers featuring clean waistline construction and flat front drape.",
+    ],
+    modulesApplied: [
+      "Shirt & Collar Construction",
+      "Trouser Drafting",
+      "Interfacing & Pressing",
+    ],
+  },
+  {
+    id: "champagne-satin-wrap-trouser",
+    title:
+      "Champagne Satin Bishop-Sleeve Wrap Blouse & Espresso Wide-Leg Trousers",
+    studentLabel: "Studio Showcase at JHF Crest",
+    category: "Tailored Suits & Separates",
+    levelBadge: "Foundational / Intermediate",
+    primaryImage: "/images/students/student-duo-satin-emerald.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-satin-emerald.jpg",
+        label: "JHF Crest Duo View",
+      },
+      {
+        url: "/images/students/student-satin-wrap-trouser.jpg",
+        label: "Wrap & Trouser Drape",
+      },
+    ],
+    summary:
+      "Lustrous champagne satin wrap top with collared neckline, waist tie sash, and blouson cuffs paired with high-waist chocolate brown wide-leg trousers.",
+    pictorialDetails: [
+      "Delicate slippery satin tension-controlled cleanly on industrial lockstitch machines with zero puckered seams.",
+      "Full bishop sleeves gathered uniformly into structured buttoned shirt cuffs.",
+      "High-waist espresso wide-leg trousers drafted for an elongated, fluid silhouette.",
+    ],
+    modulesApplied: [
+      "Shirt & Sleeve Development",
+      "Specialty Fabric Handling",
+      "Wide-Leg Trouser Block",
+    ],
+  },
+  {
+    id: "plum-buttoned-jumpsuit-pink-gown",
+    title:
+      "Deep Plum Square-Neck Buttoned Jumpsuit & Rose-Blush Modest Gown",
+    studentLabel: "Batch Practical Showcase",
+    category: "Jumpsuits & Palazzo Sets",
+    levelBadge: "Foundational Track",
+    primaryImage: "/images/students/student-duo-plum-jumpsuit-pink-gown.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-plum-jumpsuit-pink-gown.jpg",
+        label: "Duo Project Showcase",
+      },
+      {
+        url: "/images/students/student-plum-jumpsuit-detail.jpg",
+        label: "Bodice & Button Detail",
+      },
+    ],
+    summary:
+      "Dual practical showcase pairing a deep plum square-neck buttoned palazzo jumpsuit with a two-tone rose & blush panelled modest A-line maxi gown.",
+    pictorialDetails: [
+      "Asymmetric square neckline secured with decorative pearl-and-gold statement buttons and crisp vertical waist darts.",
+      "Long-line palazzo trouser legs cut for smooth movement without waist pulling.",
+      "Multi-panel princess and side-flare color blocking on the companion rose & blush modest maxi dress.",
+    ],
+    modulesApplied: [
+      "Jumpsuit Pattern Modification",
+      "Princess Seam Variations",
+      "Dress Construction",
+    ],
+  },
+  {
+    id: "mustard-navy-and-plum-contour",
+    title:
+      "Mustard & Navy Geometric Panel Dress + Plum Sweetheart Contour Dress",
+    studentLabel: "Contouring & Style-Line Study",
+    category: "Color-Block & Contour Dresses",
+    levelBadge: "Intermediate Contouring",
+    primaryImage: "/images/students/student-duo-mustard-plum.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-mustard-plum.jpg",
+        label: "Duo Contour Showcase",
+      },
+      {
+        url: "/images/students/student-mustard-navy-panel.jpg",
+        label: "Solo Mustard & Navy Dress",
+      },
+    ],
+    summary:
+      "Side-by-side demonstration of bustier sweetheart contouring and multi-piece architectural color-block panel cutting across fitted corporate midi silhouettes.",
+    pictorialDetails: [
+      "Sweetheart neckline contour seam converted smoothly across contrasting plum and blush fabric zones.",
+      "Vertical and horizontal navy-and-mustard architectural cut-ins creating slimming optical lines.",
+      "Crisp internal facing and concealed back zipper closure with zero ripple.",
+    ],
+    modulesApplied: [
+      "Bustier & Contouring",
+      "Pattern Manipulation",
+      "Corporate Midi Finishing",
+    ],
+  },
+  {
+    id: "palazzo-paperbag-and-floral-jumpsuit",
+    title:
+      "Burnt-Orange Paperbag Palazzo Trousers & Botanical Palazzo Jumpsuit",
+    studentLabel: "Cohort Wide-Leg Study",
+    category: "Jumpsuits & Palazzo Sets",
+    levelBadge: "Foundational Graduate",
+    primaryImage: "/images/students/student-duo-palazzo-floral.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-palazzo-floral.jpg",
+        label: "Duo Palazzo View",
+      },
+      {
+        url: "/images/students/student-floral-palazzo-jumpsuit.jpg",
+        label: "Floral Palazzo Jumpsuit",
+      },
+    ],
+    summary:
+      "Structured high-waist paperbag belted palazzo trousers presented alongside a vibrant gold-and-crimson floral wide-leg palazzo jumpsuit.",
+    pictorialDetails: [
+      "Gathered high-rise paperbag waistband with wide self-fabric sash tie and deep front trouser pleats.",
+      "Matched print continuity along the center-front and side seams of the floral palazzo jumpsuit.",
+      "Generous wide-leg flare engineered to fall cleanly without dragging or twisting.",
+    ],
+    modulesApplied: [
+      "Trouser Construction",
+      "Jumpsuit Pattern Drafting",
+      "Print Layout & Cutting",
+    ],
+  },
+  {
+    id: "striped-bow-and-star-peplum",
+    title:
+      "Green Striped Statement Bow Shirt & Star-Print V-Neck Peplum Set",
+    studentLabel: "Shirt & Separates Practical",
+    category: "Tailored Suits & Separates",
+    levelBadge: "Foundational Track",
+    primaryImage: "/images/students/student-duo-striped-bow-star.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-striped-bow-star.jpg",
+        label: "Duo Shirt & Trouser View",
+      },
+      {
+        url: "/images/students/student-star-peplum-shirt.jpg",
+        label: "Solo Star Peplum Top",
+      },
+    ],
+    summary:
+      "Two-student studio shirting presentation combining a green-and-white striped sculptural front-bow top with a fitted star-print V-neck notched-hem shirt.",
+    pictorialDetails: [
+      "Stripe direction intentionally alternated between collar, yoke, and oversized tailored bow tie.",
+      "V-neck star-print shirt contoured through front darts into a sleek split-notch peplum hem.",
+      "Complemented by clean lime-green and navy flat-front tailored trousers.",
+    ],
+    modulesApplied: [
+      "Shirt Construction",
+      "Collar & Placket Detailing",
+      "Stripe Alignment",
+    ],
+  },
+  {
+    id: "colorblock-lattice-and-orchid-tailoring",
+    title:
+      "Royal Blue Princess-Lattice Dress, Burgundy Shift & Orchid Suit Set",
+    studentLabel: "Multi-Cohort Studio Showcase",
+    category: "Color-Block & Contour Dresses",
+    levelBadge: "Foundational & Intermediate",
+    primaryImage: "/images/students/student-duo-colorblock-dresses.jpg",
+    angles: [
+      {
+        url: "/images/students/student-duo-colorblock-dresses.jpg",
+        label: "Color-Block Dresses Duo",
+      },
+      {
+        url: "/images/students/student-orchid-shirt-trouser.jpg",
+        label: "Orchid Shirt & Trousers",
+      },
+    ],
+    summary:
+      "Creative pattern-manipulation showcase featuring curved ivory-and-royal princess paneling with side lattice ties, collared burgundy shift styling, and orchid monochrome tailoring.",
+    pictorialDetails: [
+      "Curved bust-to-hip contrast cream yoke integrated smoothly into royal blue dress paneling with tie-lattice cutouts.",
+      "Clean contrast lapel and side-panel color blocking on the burgundy and blush longline shift dress.",
+      "Fitted orchid satin-crepe button shirt paired with high-waist brown corporate trousers at the JHF crest.",
+    ],
+    modulesApplied: [
+      "Princess Seam Variations",
+      "Dress Variations",
+      "Shirt & Trouser Assembly",
+    ],
   },
 ];
 
