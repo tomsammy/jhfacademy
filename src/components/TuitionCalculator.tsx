@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { Calculator, Home, CheckCircle2, MessageCircle } from "lucide-react";
+import Link from "next/link";
+import { Calculator, Home, CheckCircle2, MessageCircle, CreditCard } from "lucide-react";
 import {
   TRAINING_PROGRAMS,
   ADDITIONAL_FEES,
@@ -275,18 +276,24 @@ export function TuitionCalculator() {
           </div>
 
           <div className="mt-6 space-y-2.5">
+            <Link
+              href={`/register?program=${selectedProgram.id}`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-gold px-5 py-3.5 text-sm font-bold text-zinc-950 shadow-lg transition hover:bg-amber-300"
+            >
+              <CreditCard className="h-4 w-4" />
+              Register &amp; Pay ₦10,000 Online Now
+            </Link>
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-gold px-5 py-3.5 text-sm font-bold text-zinc-950 shadow-lg transition hover:bg-amber-300"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-xs font-bold text-white transition hover:bg-white/20"
             >
               <MessageCircle className="h-4 w-4" />
-              Complete Registration on WhatsApp
+              Or Send Estimate on WhatsApp
             </a>
             <p className="text-center text-[11px] text-purple-200">
-              Instant confirmation with Julian House of Fashion Academy Ilorin
-              (+234 802 265 3399)
+              Tuition can be paid in 4 × 25% installments via Paystack
             </p>
           </div>
         </div>

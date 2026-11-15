@@ -73,24 +73,36 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
             </div>
 
             <div className="mt-7 flex flex-col gap-2">
-              <a
-                href={buildWhatsAppUrl(
-                  `Hello JHF Academy! I want to enroll in the ${program.title} (${program.priceFormatted} for ${program.duration}).`
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href={`/register?program=${program.id}`}
                 className="inline-flex w-full items-center justify-center rounded-xl bg-brand-purple px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-violet"
               >
-                Enroll in {program.title} →
-              </a>
-              {!showFullDetails && (
-                <Link
-                  href={`/academy#${program.slug}`}
-                  className="text-center text-xs font-semibold text-brand-purple hover:underline"
+                Register &amp; Pay Online (₦10k) →
+              </Link>
+              <div className="flex items-center justify-between gap-2 pt-1">
+                {!showFullDetails ? (
+                  <Link
+                    href={`/academy#${program.slug}`}
+                    className="text-xs font-semibold text-brand-purple hover:underline"
+                  >
+                    View Full Syllabus
+                  </Link>
+                ) : (
+                  <span className="text-[11px] font-medium text-zinc-500">
+                    25% × 4 installments available
+                  </span>
+                )}
+                <a
+                  href={buildWhatsAppUrl(
+                    `Hello JHF Academy! I have a question about enrolling in the ${program.title} (${program.priceFormatted} for ${program.duration}).`
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs font-semibold text-zinc-600 hover:text-brand-purple"
                 >
-                  View Full Syllabus
-                </Link>
-              )}
+                  Ask on WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         ))}
@@ -145,21 +157,21 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
               </div>
 
               <div className="mt-7 flex flex-wrap items-center gap-3">
+                <Link
+                  href={`/register?program=${fullProgram.id}`}
+                  className="inline-flex items-center justify-center rounded-xl bg-brand-gold px-6 py-3.5 text-sm font-bold text-zinc-950 transition hover:bg-amber-300"
+                >
+                  Register Online for 9-Month Programme →
+                </Link>
                 <a
                   href={buildWhatsAppUrl(
                     `Hello JHF Academy! I am interested in the 9-Month Full Programme Option (${fullProgram.priceFormatted}).`
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-xl bg-brand-gold px-6 py-3.5 text-sm font-bold text-zinc-950 transition hover:bg-amber-300"
-                >
-                  Apply for Full 9-Month Programme →
-                </a>
-                <a
-                  href="#tuition-calculator"
                   className="inline-flex items-center justify-center rounded-xl border border-white/30 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Estimate with Accommodation
+                  Inquire on WhatsApp
                 </a>
               </div>
             </div>
@@ -212,16 +224,22 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
               </ul>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex flex-col gap-2">
+              <Link
+                href={`/register?program=${specialised.id}`}
+                className="inline-flex w-full items-center justify-center rounded-xl bg-zinc-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-purple"
+              >
+                Register Online for Male Fashion Design →
+              </Link>
               <a
                 href={buildWhatsAppUrl(
-                  `Hello JHF Academy! I would like to register for Specialised Male Fashion Design (${specialised.priceFormatted} for ${specialised.duration}).`
+                  `Hello JHF Academy! I would like to inquire about Specialised Male Fashion Design (${specialised.priceFormatted} for ${specialised.duration}).`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center rounded-xl bg-zinc-900 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-purple"
+                className="text-center text-xs font-semibold text-brand-purple hover:underline"
               >
-                Enroll in Male Fashion Design →
+                Ask Questions on WhatsApp
               </a>
             </div>
           </div>

@@ -1,3 +1,8 @@
+export interface CourseModule {
+  title: string;
+  topics: string[];
+}
+
 export interface TrainingProgram {
   id: string;
   slug: string;
@@ -12,6 +17,9 @@ export interface TrainingProgram {
   summary: string;
   curriculum: string[];
   outcomes: string[];
+  courseOutline: CourseModule[];
+  expectedOutcomeText: string;
+  finalProject?: string;
   highlighted?: boolean;
 }
 
@@ -103,21 +111,102 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
     priceFormatted: "₦150,000",
     duration: "3 months",
     isoDuration: "P3M",
-    level: "Beginner to Foundation",
+    level: "Beginners / Foundational",
     badge: "Beginner Friendly",
     summary:
-      "Built for complete beginners with zero prior sewing experience. Gain confidence on industrial machines and draft accurate foundational patterns from scratch.",
+      "Built for complete beginners with zero prior sewing experience. Gain confidence in measurements, pattern drafting, fashion sketching, and garment construction.",
     curriculum: [
-      "Industrial straight-stitch & overlock machine control and maintenance",
-      "Accurate body measurement anatomy & standard measurement charts",
-      "Foundational pattern drafting: basic bodice, straight & flared skirts, basic sleeve, and beginner trouser blocks",
-      "Clean seam finishing, zipper insertion, neat hemming & garment pressing",
-      "Complete practical projects: fitted skirts, simple dresses, and casual tops",
+      "Measurements & Pattern Drafting (Bodice, Bust/Waist Darts & Princess Seams)",
+      "Fashion Illustration & Sketch Interpretation",
+      "Skirt, Trouser & Shirt Drafting and Construction",
+      "Sleeve Development, Dress & Jumpsuit Construction",
+      "Creative Skills & Embellishment (Beadwork & Crochet)",
     ],
     outcomes: [
-      "Cut and sew well-fitted everyday garments without guesswork",
-      "Read and draft custom measurements on brown craft pattern paper",
+      "Take accurate body measurements and draft half-scale & full-scale patterns",
+      "Cut, sew, fit, and finish skirts, trousers, shirts, dresses, and jumpsuits with creative embellishments",
     ],
+    courseOutline: [
+      {
+        title: "1. MEASUREMENTS AND PATTERN DRAFTING",
+        topics: [
+          "Understanding and reading the tape rule.",
+          "Basic body measurements.",
+          "Half-scale pattern drafting.",
+          "Full-scale pattern drafting.",
+          "Basic bodice drafting.",
+          "Bust dart and waist dart development.",
+          "Princess seam variations: bust, shoulder and armhole.",
+          "Dress pattern development.",
+        ],
+      },
+      {
+        title: "2. FASHION ILLUSTRATION",
+        topics: [
+          "Introduction to fashion sketching.",
+          "Basic fashion figures and proportions.",
+          "Sketching and interpreting garment designs.",
+        ],
+      },
+      {
+        title: "3. SKIRT CONSTRUCTION",
+        topics: [
+          "Basic skirt drafting.",
+          "Skirt variations and styles.",
+          "Pattern modification and garment construction.",
+        ],
+      },
+      {
+        title: "4. TROUSER CONSTRUCTION",
+        topics: [
+          "Basic trouser measurements and drafting.",
+          "Trouser pattern development.",
+          "Cutting and construction.",
+        ],
+      },
+      {
+        title: "5. SHIRT CONSTRUCTION",
+        topics: [
+          "Basic shirt drafting.",
+          "Collar and placket construction.",
+          "Sleeve attachment and finishing.",
+        ],
+      },
+      {
+        title: "6. SLEEVE DEVELOPMENT",
+        topics: [
+          "Understanding sleeve patterns.",
+          "Different sleeve styles and variations.",
+          "Sleeve drafting and attachment.",
+        ],
+      },
+      {
+        title: "7. DRESS CONSTRUCTION",
+        topics: [
+          "Dress pattern development.",
+          "Different dress styles and variations.",
+          "Cutting, sewing, fitting and finishing.",
+        ],
+      },
+      {
+        title: "8. JUMPSUIT CONSTRUCTION",
+        topics: [
+          "Basic jumpsuit drafting.",
+          "Pattern development and modification.",
+          "Cutting and construction.",
+        ],
+      },
+      {
+        title: "9. CREATIVE SKILLS AND EMBELLISHMENT",
+        topics: [
+          "Introduction to basic beadwork.",
+          "Introduction to crochet making.",
+          "Application of creative embellishments to garments.",
+        ],
+      },
+    ],
+    expectedOutcomeText:
+      "By the end of the programme, students should be able to take body measurements, draft patterns, interpret fashion sketches, manipulate basic patterns, cut and construct different garment types, and apply basic creative embellishments.",
   },
   {
     id: "intermediate",
@@ -131,18 +220,97 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
     level: "Intermediate",
     badge: "Skill Upgrade",
     summary:
-      "Bridge the gap between basic sewing and commercial-ready tailoring. Master trousers, darts manipulation, structured collars, and Nigerian occasion wear.",
+      "Bridge the gap between foundational sewing and commercial-ready tailoring. Master advanced dart manipulation, bustier contouring, blazers, cargo pants, hoodies, and heavy beadwork.",
     curriculum: [
-      "Precision trouser pattern drafting, trouser zip flaps, side & welt pockets",
-      "Dart manipulation, princess seams, yokes & style-line transformations",
-      "Structured shirt collars, cuffs, bishop sleeves & puff sleeves",
-      "Full garment lining techniques and concealed inner finishing",
-      "Aso-Ebi, Ankara & native attire fitting and alteration mastery",
+      "Advanced Dart Manipulation, Bustier & Full Body Contouring",
+      "Advanced Skirt Development & Structural Garment Design",
+      "Cargo Pants & Hoodie Pattern Drafting and Construction",
+      "Tailored Blazer Structure, Lapels, Collars & Lining",
+      "Advanced Beadwork & Heavy Garment Embellishments",
     ],
     outcomes: [
-      "Eliminate trouser crotch pulling and bodice gaping permanently",
-      "Deliver commercial client orders with boutique-grade interior finishing",
+      "Execute advanced dart transfers, bustier contouring, and structured garment designs",
+      "Construct commercial-grade cargo pants, hoodies, blazers, and embellished pieces",
     ],
+    courseOutline: [
+      {
+        title: "1. ADVANCED DART MANIPULATION",
+        topics: [
+          "Advanced dart manipulation techniques.",
+          "Dart transfer and conversion.",
+          "Multiple dart applications.",
+          "Dart manipulation for creative design development.",
+        ],
+      },
+      {
+        title: "2. BUSTIER AND CONTOURING",
+        topics: [
+          "Bustier pattern development.",
+          "Bust and under-bust contouring.",
+          "Shoulder and armhole contouring.",
+          "Yoke development and variations.",
+          "Posterior contouring and variations.",
+          "Different bustier styles and construction techniques.",
+        ],
+      },
+      {
+        title: "3. ADVANCED SKIRT DEVELOPMENT",
+        topics: [
+          "Advanced skirt pattern manipulation.",
+          "Skirt variations and design development.",
+          "Creative skirt construction techniques.",
+        ],
+      },
+      {
+        title: "4. STRUCTURAL DESIGN AND GARMENT DEVELOPMENT",
+        topics: [
+          "Introduction to structural fashion design.",
+          "Understanding garment structure and support.",
+          "Structural pattern development.",
+          "Creating and applying garment structures.",
+          "Developing structured garment designs.",
+        ],
+      },
+      {
+        title: "5. CARGO PANTS CONSTRUCTION",
+        topics: [
+          "Cargo pants pattern drafting.",
+          "Pocket development and placement.",
+          "Cargo details and construction.",
+          "Professional finishing.",
+        ],
+      },
+      {
+        title: "6. HOODIE CONSTRUCTION",
+        topics: [
+          "Hoodie pattern development.",
+          "Hood drafting and construction.",
+          "Pocket and design details.",
+          "Ribbing application and finishing.",
+        ],
+      },
+      {
+        title: "7. BLAZER CONSTRUCTION",
+        topics: [
+          "Blazer pattern development.",
+          "Understanding blazer structure.",
+          "Lapel and collar construction.",
+          "Sleeve and lining application.",
+          "Blazer construction and finishing.",
+        ],
+      },
+      {
+        title: "8. ADVANCED BEADWORK AND EMBELLISHMENT",
+        topics: [
+          "Advanced beadwork techniques.",
+          "Heavy beadwork applications.",
+          "Bead placement, patterns and design development.",
+          "Incorporating embellishments into garment designs.",
+        ],
+      },
+    ],
+    expectedOutcomeText:
+      "By the end of the programme, students should be able to execute advanced dart manipulation, develop bustier designs, apply contouring techniques, create structured garments, construct cargo pants, hoodies and blazers, and execute advanced beadwork.",
   },
   {
     id: "advanced",
@@ -153,21 +321,85 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
     priceFormatted: "₦200,000",
     duration: "3 months",
     isoDuration: "P3M",
-    level: "Advanced / Couture",
+    level: "Advanced",
     badge: "Bridal & Corsetry",
     summary:
-      "Master high-value luxury fashion design: bridal gowns, structured beaded corsets, mannequin draping, and tailored women's blazers.",
+      "Master high-value luxury couture: advanced boned corsetry, sculptural structural design, bridal gown engineering, experimental pattern cutting, and runway presentation.",
     curriculum: [
-      "Cupped bustier & Victorian/illusion corset pattern drafting and boning",
-      "Bridal wear, reception dresses & layered princess ballgown engineering",
-      "3D draping on dress forms & couture lace applique placement",
-      "Tailored women's blazers, notched lapels, shoulder pads & two-piece suits",
-      "Luxury fashion business pricing, client consultations & brand launch",
+      "Advanced Corset Design, Boning Placement & Bust/Waist Shaping",
+      "Advanced Structural Design, Sculptural Volume, Ruching & 3D Details",
+      "Bridal Wear Design, Trains, Structured Bodices & Lace Applique",
+      "Deconstruction, Experimental Draping & Modular Pattern Cutting",
+      "Couture Internal Finishing, Quality Control & Final Project Showcase",
     ],
     outcomes: [
-      "Design and construct high-ticket bridal, Aso-Ebi, and corporate outfits",
-      "Launch or scale an independent luxury womenswear fashion house",
+      "Independently develop and construct advanced corsets, structured designs, and bridal outfits",
+      "Execute experimental pattern techniques and present a complete advanced garment final project",
     ],
+    courseOutline: [
+      {
+        title: "1. ADVANCED CORSET DESIGN AND CONSTRUCTION",
+        topics: [
+          "Introduction to advanced corsetry.",
+          "Corset pattern drafting and development.",
+          "Different corset styles and variations.",
+          "Boning techniques and placement.",
+          "Bust and waist shaping.",
+          "Corset structure and support.",
+          "Corset fitting and adjustments.",
+          "Advanced corset finishing.",
+        ],
+      },
+      {
+        title: "2. ADVANCED STRUCTURAL DESIGN",
+        topics: [
+          "Advanced garment structuring.",
+          "Understanding internal garment support.",
+          "Structural pattern development.",
+          "Sculptural garment design.",
+          "Volume creation and manipulation.",
+          "Ruching, pleating and 3D garment details.",
+          "Experimental draping techniques.",
+        ],
+      },
+      {
+        title: "3. BRIDAL WEAR DESIGN AND CONSTRUCTION",
+        topics: [
+          "Bridal gown pattern development.",
+          "Understanding bridal silhouettes.",
+          "Structured bridal bodices.",
+          "Wedding gown construction.",
+          "Train development and construction.",
+          "Lace application and placement.",
+          "Bridal embellishment techniques.",
+          "Bridal fitting and finishing.",
+        ],
+      },
+      {
+        title: "4. ADVANCED PATTERN CUTTING AND CREATIVE DEVELOPMENT",
+        topics: [
+          "Sculptural pattern cutting.",
+          "Deconstruction and reconstruction techniques.",
+          "Experimental pattern manipulation.",
+          "Creative draping and design development.",
+          "Modular and transformable garment concepts.",
+        ],
+      },
+      {
+        title: "5. ADVANCED FINISHING AND PRESENTATION",
+        topics: [
+          "Professional garment finishing.",
+          "Internal garment finishing.",
+          "Advanced fitting and corrections.",
+          "Quality control.",
+          "Garment presentation and styling.",
+        ],
+      },
+    ],
+    expectedOutcomeText:
+      "By the end of the programme, students should be able to independently develop and construct advanced corsets, structured garments and bridal outfits, apply sculptural and experimental design techniques, execute complex garment details and deliver professionally finished pieces.",
+    finalProject:
+      "Each student will develop a design concept, create the necessary patterns, construct a complete advanced garment and present the finished piece.",
   },
   {
     id: "full-programme",
@@ -184,15 +416,49 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
     summary:
       "For students enrolling in Foundational, Intermediate, and Advanced levels consecutively — 9 months of intensive studio mentorship transforming passion into mastery.",
     curriculum: [
-      "Includes 100% of Foundational (3 mos), Intermediate (3 mos), and Advanced (3 mos) modules",
+      "Phase 1 (Months 1–3): Complete Foundational Fashion Design (9 Core Modules)",
+      "Phase 2 (Months 4–6): Complete Intermediate Fashion Design (8 Core Modules)",
+      "Phase 3 (Months 7–9): Complete Advanced Fashion Design (5 Couture Modules + Final Project)",
       "Continuous guided studio mentorship with Designer Julihana Tomori",
-      "Graduated portfolio showcase featuring casual, native, blazer & bridal pieces",
-      "Production speed coaching on industrial equipment & fashion entrepreneurship",
     ],
     outcomes: [
-      "Graduate ready to run a profitable fashion studio or command senior roles",
-      "Complete portfolio of self-drafted bespoke and ready-to-wear outfits",
+      "Master every level sequentially from tape-rule fundamentals to advanced corsetry & bridals",
+      "Graduate with a complete couture portfolio and readiness to run a profitable fashion studio",
     ],
+    courseOutline: [
+      {
+        title: "PHASE 1 (MONTHS 1–3): FOUNDATIONAL FASHION DESIGN",
+        topics: [
+          "Measurements and pattern drafting (half-scale, full-scale, bodice, bust/waist darts, princess seams).",
+          "Fashion illustration, basic figures, proportions & design interpretation.",
+          "Skirt, trouser, shirt, sleeve, dress & jumpsuit construction.",
+          "Creative skills: basic beadwork & crochet embellishment application.",
+        ],
+      },
+      {
+        title: "PHASE 2 (MONTHS 4–6): INTERMEDIATE FASHION DESIGN",
+        topics: [
+          "Advanced dart manipulation, transfer, conversion & multiple dart applications.",
+          "Bustier and contouring (bust, under-bust, shoulder, armhole, yokes & posterior).",
+          "Advanced skirt development & structural garment design with support.",
+          "Cargo pants, hoodie & tailored blazer construction + heavy beadwork.",
+        ],
+      },
+      {
+        title: "PHASE 3 (MONTHS 7–9): ADVANCED FASHION DESIGN & CAPSTONE",
+        topics: [
+          "Advanced corset design, boning placement, waist shaping & internal support.",
+          "Sculptural structural design, volume manipulation, ruching, pleating & 3D draping.",
+          "Bridal wear design & construction (trains, structured bodices, lace placement).",
+          "Experimental pattern cutting, deconstruction/reconstruction & modular garments.",
+          "Couture internal finishing, quality control & final advanced garment presentation.",
+        ],
+      },
+    ],
+    expectedOutcomeText:
+      "By the end of the 9-month Full Programme, students progress seamlessly from zero prior sewing experience to independently drafting, structuring, embellishing, and presenting advanced couture, bridal, structured, and commercial garments.",
+    finalProject:
+      "Each graduating Full Programme student develops a complete original design concept, drafts all patterns, constructs an advanced showpiece garment, and presents the finished piece.",
   },
   {
     id: "male-fashion",
@@ -218,6 +484,42 @@ export const TRAINING_PROGRAMS: TrainingProgram[] = [
       "Construct crisp Senator outfits, Agbada, and bespoke men's trousers",
       "Tap into Nigeria's high-demand bespoke menswear and groom's attire market",
     ],
+    courseOutline: [
+      {
+        title: "1. MENSWEAR MEASUREMENTS & BLOCK DRAFTING",
+        topics: [
+          "Menswear body measurement anatomy and posture balance.",
+          "Chest, shoulder slope and back-width pattern drafting.",
+          "Structured two-piece sleeve pitch and armhole balance.",
+        ],
+      },
+      {
+        title: "2. SENATOR SUITS, KAFTANS & AGBADA",
+        topics: [
+          "Senator top and traditional kaftan pattern drafting.",
+          "Crisp hidden and exposed placket construction.",
+          "Luxury Agbada cutting, neck-facing geometry & embroidery preparation.",
+        ],
+      },
+      {
+        title: "3. BESPOKE MEN'S TROUSER CONSTRUCTION",
+        topics: [
+          "Flat-front and pleated menswear trouser pattern drafting.",
+          "Zipper fly shield, side slant pockets & double-welt back pockets.",
+          "Waistband interfacing, curtain lining & bespoke fitting adjustments.",
+        ],
+      },
+      {
+        title: "4. FORMAL SHIRTS & FINISHING STANDARDS",
+        topics: [
+          "Classic two-piece collar stand, shoulder yoke & placket tailoring.",
+          "Sleeve plackets, fused cuffs & French seam shirt construction.",
+          "Sharp fusing, steam pressing & quality control for client delivery.",
+        ],
+      },
+    ],
+    expectedOutcomeText:
+      "By the end of the 4-month Male Fashion Design track, students should be able to measure, draft, cut, fuse, assemble, and professionally press crisp Senator wears, Agbada sets, bespoke men's trousers, and tailored dress shirts.",
   },
 ];
 

@@ -72,22 +72,18 @@ export default function HomePage() {
 
               {/* Primary CTAs */}
               <div className="mt-8 flex flex-wrap items-center gap-3.5">
-                <a
-                  href="#programs"
+                <Link
+                  href="/register"
                   className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-purple-900/20 transition hover:bg-brand-violet"
                 >
                   <GraduationCap className="h-4 w-4 text-brand-gold" />
-                  Explore Courses &amp; Fees
-                </a>
+                  Register &amp; Pay Online (₦10k)
+                </Link>
                 <a
-                  href={buildWhatsAppUrl(
-                    "Hello Julian House of Fashion! I would like to book a bespoke outfit or schedule an academy tour in Ilorin."
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#programs"
                   className="inline-flex items-center gap-2 rounded-full border-2 border-brand-purple bg-white px-6 py-3 text-sm font-bold text-brand-purple transition hover:bg-brand-lavender"
                 >
-                  Book Bespoke Couture
+                  View Fees &amp; Syllabus
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

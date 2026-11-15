@@ -3,25 +3,22 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Phone, MapPin, MessageCircle } from "lucide-react";
+import { Menu, X, Phone, MapPin, CreditCard } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
-import { SITE_CONFIG, ADDITIONAL_FEES, buildWhatsAppUrl } from "@/data/siteData";
+import { SITE_CONFIG, ADDITIONAL_FEES } from "@/data/siteData";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/academy", label: "Academy & Fees" },
+  { href: "/register", label: "Register Online" },
   { href: "/couture", label: "Bespoke Couture" },
   { href: "/about", label: "About & Studio" },
-  { href: "/contact", label: "Contact & Directions" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-
-  const enrollUrl = buildWhatsAppUrl(
-    "Hello Julian House of Fashion Academy! I would like to register for the upcoming training batch in Ilorin."
-  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-purple-100 bg-white/95 backdrop-blur-md">
@@ -37,14 +34,12 @@ export function Navbar() {
             Admissions Open • Reg: {ADDITIONAL_FEES.registrationFormatted} •
             Accommodation Available ({ADDITIONAL_FEES.accommodationFormatted}/3 mos)
           </span>
-          <a
-            href={enrollUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register"
             className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2.5 py-0.5 text-xs font-bold text-zinc-950 transition hover:bg-amber-300"
           >
-            Enroll Now →
-          </a>
+            Register Online →
+          </Link>
         </div>
       </div>
 
@@ -81,15 +76,13 @@ export function Navbar() {
             <Phone className="h-3.5 w-3.5" />
             {SITE_CONFIG.phoneDisplay}
           </a>
-          <a
-            href={enrollUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register"
             className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-violet"
           >
-            <MessageCircle className="h-4 w-4 text-brand-gold" />
-            Apply on WhatsApp
-          </a>
+            <CreditCard className="h-4 w-4 text-brand-gold" />
+            Register (₦10k)
+          </Link>
         </div>
 
         {/* Mobile menu button */}
@@ -134,15 +127,14 @@ export function Navbar() {
               <Phone className="h-3.5 w-3.5" />
               Call Studio
             </a>
-            <a
-              href={enrollUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/register"
+              onClick={() => setMobileOpen(false)}
               className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-purple px-3 py-2.5 text-xs font-semibold text-white"
             >
-              <MessageCircle className="h-3.5 w-3.5 text-brand-gold" />
-              WhatsApp Enroll
-            </a>
+              <CreditCard className="h-3.5 w-3.5 text-brand-gold" />
+              Register (₦10k)
+            </Link>
           </div>
         </div>
       )}
