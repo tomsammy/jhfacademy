@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/academy", label: "Academy & Fees" },
   { href: "/register", label: "Register Online" },
+  { href: "/pay", label: "Pay Fees" },
   { href: "/couture", label: "Bespoke Couture" },
   { href: "/about", label: "About & Studio" },
   { href: "/contact", label: "Contact" },
@@ -44,19 +45,26 @@ export function Navbar() {
       </div>
 
       {/* Main Navigation */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" aria-label="Julian House of Fashion Academy Home">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          aria-label="Julian House of Fashion Academy Home"
+          className="shrink-0"
+        >
           <BrandLogo />
         </Link>
 
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+        <nav
+          className="hidden items-center gap-4 lg:flex xl:gap-6"
+          aria-label="Primary"
+        >
           {NAV_LINKS.map((link) => {
             const active = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-semibold transition ${
+                className={`whitespace-nowrap text-xs font-semibold transition xl:text-sm ${
                   active
                     ? "text-brand-purple underline decoration-brand-gold decoration-2 underline-offset-8"
                     : "text-zinc-700 hover:text-brand-purple"
@@ -68,17 +76,17 @@ export function Navbar() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden shrink-0 items-center gap-2.5 lg:flex">
           <a
             href={`tel:${SITE_CONFIG.phoneRaw}`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 px-3.5 py-2 text-xs font-semibold text-brand-purple transition hover:bg-brand-lavender"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-purple-200 px-3 py-2 text-xs font-semibold text-brand-purple transition hover:bg-brand-lavender"
           >
             <Phone className="h-3.5 w-3.5" />
             {SITE_CONFIG.phoneDisplay}
           </a>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-violet"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-brand-purple px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-brand-violet xl:px-4 xl:text-sm"
           >
             <CreditCard className="h-4 w-4 text-brand-gold" />
             Register (₦10k)
