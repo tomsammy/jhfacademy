@@ -84,7 +84,7 @@ export default function HomePage() {
                   href="#programs"
                   className="inline-flex items-center gap-2 rounded-full border-2 border-brand-purple bg-white px-6 py-3 text-sm font-bold text-brand-purple transition hover:bg-brand-lavender"
                 >
-                  View Fees &amp; Syllabus
+                  View Programmes &amp; Fees
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

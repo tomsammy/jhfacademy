@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import React from "react";
 import Link from "next/link";
-import { BookOpen, Camera, CheckCircle2, GraduationCap, Home, FileCheck2 } from "lucide-react";
+import { Camera, CheckCircle2, GraduationCap, Home, FileCheck2, Lock } from "lucide-react";
 import { ProgramCards } from "@/components/ProgramCards";
 import { StudentProjectsShowcase } from "@/components/StudentProjectsShowcase";
 import { TuitionCalculator } from "@/components/TuitionCalculator";
@@ -15,7 +15,7 @@ import {
 } from "@/data/siteData";
 
 export const metadata: Metadata = {
-  title: "Academy Courses, Syllabus & Fees in Ilorin",
+  title: "Academy Courses, Training Programmes & Fees in Ilorin",
   description:
     "Explore Julian House of Fashion Academy training fees in Ilorin: Foundational Class ₦150,000 (3 mos), Intermediate ₦150,000 (3 mos), Advanced ₦200,000 (3 mos), 9-Month Full Programme ₦500,000, Male Fashion Design ₦250,000 (4 mos). Reg Fee ₦10,000. Accommodation ₦50,000/3 mos.",
   alternates: {
@@ -128,151 +128,82 @@ export default function AcademyPage() {
         </div>
       </section>
 
-      {/* Detailed Official Course Outlines by Level */}
+      {/* Official Course Syllabus — Locked Behind ₦10,000 Registration */}
       <section
         id="course-outlines"
         className="border-t border-purple-100 bg-brand-cream/40 py-16"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand-purple ring-1 ring-purple-200">
-              <BookOpen className="h-3.5 w-3.5" />
-              Official Academy Syllabus
-            </span>
-            <h2 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-4xl">
-              Detailed Official Course Outlines by Level
-            </h2>
-            <p className="mt-3 text-base text-zinc-700">
-              Review the exact module-by-module training syllabus for
-              Foundational (3 months), Intermediate (3 months), Advanced (3
-              months), and Male Fashion Design (4 months). Students who register
-              online receive their chosen programme&apos;s official outline on
-              their printable Admission Acknowledgement Slip.
-            </p>
-          </div>
-
-          <div className="mt-10 space-y-10">
-            {TRAINING_PROGRAMS.filter((p) => p.id !== "full-programme").map(
-              (program) => (
-                <article
-                  key={program.id}
-                  id={`outline-${program.id}`}
-                  className="overflow-hidden rounded-3xl border border-purple-100 bg-white shadow-sm"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-4 border-b border-purple-100 bg-brand-purple px-6 py-5 text-white">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-brand-goldLight">
-                        {program.level} • {program.duration}
-                      </p>
-                      <h3 className="mt-1 font-serif text-2xl font-bold sm:text-3xl">
-                        {program.title} Course Outline
-                      </h3>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="rounded-full bg-white/15 px-4 py-1.5 text-sm font-bold text-white">
-                        Tuition: {program.priceFormatted}
-                      </span>
-                      <Link
-                        href={`/register?program=${program.id}`}
-                        className="rounded-full bg-brand-gold px-5 py-2 text-xs font-bold uppercase tracking-wide text-zinc-950 transition hover:bg-brand-goldLight"
-                      >
-                        Register for {program.title}
-                      </Link>
-                    </div>
-                  </div>
-
-                  <div className="p-6 sm:p-8">
-                    <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                      {program.courseOutline.map((mod, idx) => (
-                        <div
-                          key={idx}
-                          className="rounded-2xl border border-purple-100 bg-brand-cream/30 p-5"
-                        >
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-brand-purple">
-                            {mod.title}
-                          </h4>
-                          <ul className="mt-3 space-y-2 text-sm text-zinc-700">
-                            {mod.topics.map((topic, tIdx) => (
-                              <li key={tIdx} className="flex items-start gap-2">
-                                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-goldDark" />
-                                <span>{topic}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
-                        <p className="text-xs font-bold uppercase tracking-wider text-brand-goldDark">
-                          Expected Outcome
-                        </p>
-                        <p className="mt-2 text-sm leading-relaxed text-zinc-800">
-                          {program.expectedOutcomeText}
-                        </p>
-                      </div>
-
-                      {program.finalProject ? (
-                        <div className="rounded-2xl border border-purple-200 bg-purple-50/60 p-5">
-                          <p className="text-xs font-bold uppercase tracking-wider text-brand-purple">
-                            Final Project
-                          </p>
-                          <p className="mt-2 text-sm leading-relaxed text-zinc-800">
-                            {program.finalProject}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col justify-between rounded-2xl border border-purple-100 bg-zinc-50 p-5">
-                          <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-brand-purple">
-                              Flexible Tuition &amp; Progression
-                            </p>
-                            <p className="mt-2 text-sm text-zinc-700">
-                              Start with the ₦10,000 Registration &amp; Agreement
-                              Form, print your Acknowledgement Slip, and pay{" "}
-                              {program.priceFormatted} in 4 installments of 25%
-                              via Paystack.
-                            </p>
-                          </div>
-                          <div className="mt-3">
-                            <Link
-                              href={`/register?program=${program.id}`}
-                              className="text-xs font-bold text-brand-purple underline-offset-2 hover:underline"
-                            >
-                              Start {program.title} Registration →
-                            </Link>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              )
-            )}
-          </div>
-
-          <div className="mt-10 rounded-3xl border-2 border-brand-gold bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-brand-goldDark">
-                  9-Month Full Programme Option — ₦500,000
-                </p>
-                <h3 className="mt-1 font-serif text-2xl font-bold text-zinc-950">
-                  Enrolling in Foundational + Intermediate + Advanced Consecutively?
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm text-zinc-700">
-                  The 9-month Full Programme covers every module listed above
-                  across Foundational, Intermediate, and Advanced classes plus
-                  continuous studio mentorship and the Advanced Final Project.
+          <div className="rounded-3xl border-2 border-purple-200 bg-white p-7 shadow-sm sm:p-10">
+            <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+              <div className="max-w-3xl">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-lavender px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand-purple">
+                  <Lock className="h-3.5 w-3.5" />
+                  Registered Students Exclusive
+                </span>
+                <h2 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-4xl">
+                  Official Course Syllabus &amp; Training Outlines
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-zinc-700">
+                  The detailed module-by-module course syllabus, practical
+                  drafting breakdown, and capstone project guidelines are
+                  exclusively unlocked for admitted students upon payment of the{" "}
+                  <strong className="text-brand-purple">
+                    {ADDITIONAL_FEES.registrationFormatted} one-time Registration
+                    Fee
+                  </strong>
+                  . Once registered, your full programme syllabus is generated on
+                  your printable{" "}
+                  <strong>Admission Acknowledgement Slip</strong>.
                 </p>
               </div>
-              <Link
-                href="/register?program=full-programme"
-                className="shrink-0 rounded-full bg-brand-purple px-6 py-3 text-center text-sm font-bold text-white transition hover:bg-brand-purpleDark"
-              >
-                Register for Full Programme →
-              </Link>
+              <div className="shrink-0">
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-7 py-4 text-sm font-bold text-white shadow-lg shadow-purple-900/15 transition hover:bg-brand-violet"
+                >
+                  <Lock className="h-4 w-4 text-brand-gold" />
+                  Pay ₦10,000 Registration to Unlock Syllabus →
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+              {TRAINING_PROGRAMS.map((program) => (
+                <div
+                  key={program.id}
+                  className="flex flex-col justify-between rounded-2xl border border-purple-100 bg-brand-lavender/30 p-4"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-brand-purple">
+                        {program.duration}
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-0.5 text-[10px] font-bold text-zinc-700 ring-1 ring-purple-200">
+                        <Lock className="h-3 w-3 text-brand-goldDark" />
+                        {program.courseOutline.length} Modules Locked
+                      </span>
+                    </div>
+                    <h3 className="mt-2 font-serif text-lg font-bold text-zinc-900">
+                      {program.title}
+                    </h3>
+                    <p className="mt-1 text-xs font-semibold text-brand-purple">
+                      Tuition: {program.priceFormatted}
+                    </p>
+                    <p className="mt-2 text-xs text-zinc-600">
+                      Complete the ₦10,000 registration form to unlock all{" "}
+                      {program.courseOutline.length} official syllabus modules on
+                      your Acknowledgement Slip.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/register?program=${program.id}`}
+                    className="mt-4 inline-flex items-center justify-center rounded-xl bg-white px-3 py-2 text-xs font-bold text-brand-purple ring-1 ring-purple-200 transition hover:bg-brand-purple hover:text-white"
+                  >
+                    Unlock {program.title} Outline →
+                  </Link>
+                </div>
+              ))}
             </div>
           </div>
         </div>

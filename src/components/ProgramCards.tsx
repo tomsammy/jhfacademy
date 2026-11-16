@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Check, Clock, Sparkles, Home, FileCheck2 } from "lucide-react";
+import { Check, Clock, Sparkles, Home, FileCheck2, Lock } from "lucide-react";
 import {
   TRAINING_PROGRAMS,
   ADDITIONAL_FEES,
@@ -57,10 +57,7 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
               </p>
 
               <ul className="mt-5 space-y-2.5 border-t border-purple-50 pt-5">
-                {(showFullDetails
-                  ? program.curriculum
-                  : program.curriculum.slice(0, 4)
-                ).map((item, idx) => (
+                {program.outcomes.map((item, idx) => (
                   <li
                     key={idx}
                     className="flex items-start gap-2.5 text-sm text-zinc-700"
@@ -70,6 +67,14 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
                   </li>
                 ))}
               </ul>
+
+              <div className="mt-4 flex items-center gap-2 rounded-xl border border-purple-100 bg-brand-lavender/50 px-3.5 py-2.5 text-xs font-medium text-brand-purple">
+                <Lock className="h-4 w-4 shrink-0 text-brand-goldDark" />
+                <span>
+                  {program.courseOutline.length}-Module Course Syllabus unlocked
+                  upon ₦10,000 registration
+                </span>
+              </div>
             </div>
 
             <div className="mt-7 flex flex-col gap-2">
@@ -80,18 +85,13 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
                 Register &amp; Pay Online (₦10k) →
               </Link>
               <div className="flex items-center justify-between gap-2 pt-1">
-                {!showFullDetails ? (
-                  <Link
-                    href={`/academy#${program.slug}`}
-                    className="text-xs font-semibold text-brand-purple hover:underline"
-                  >
-                    View Full Syllabus
-                  </Link>
-                ) : (
-                  <span className="text-[11px] font-medium text-zinc-500">
-                    25% × 4 installments available
-                  </span>
-                )}
+                <Link
+                  href={`/register?program=${program.id}`}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-brand-purple hover:underline"
+                >
+                  <Lock className="h-3 w-3" />
+                  Unlock Syllabus (₦10k Reg)
+                </Link>
                 <a
                   href={buildWhatsAppUrl(
                     `Hello JHF Academy! I have a question about enrolling in the ${program.title} (${program.priceFormatted} for ${program.duration}).`
@@ -144,7 +144,7 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
                 </p>
 
                 <div className="mt-6 grid gap-2.5 sm:grid-cols-2">
-                  {fullProgram.curriculum.map((item, idx) => (
+                  {fullProgram.outcomes.map((item, idx) => (
                     <div
                       key={idx}
                       className="flex items-start gap-2 rounded-xl bg-white/10 p-3 text-xs leading-relaxed text-purple-50"
@@ -153,6 +153,14 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
                       <span>{item}</span>
                     </div>
                   ))}
+                  <div className="flex items-center gap-2 rounded-xl border border-brand-gold/40 bg-white/10 p-3 text-xs font-semibold text-brand-gold sm:col-span-2">
+                    <Lock className="h-4 w-4 shrink-0" />
+                    <span>
+                      Complete 3-Phase Course Syllabus (Foundational,
+                      Intermediate &amp; Advanced) unlocked on your Admission
+                      Acknowledgement Slip after ₦10,000 registration.
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -212,7 +220,7 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
               </p>
 
               <ul className="mt-5 space-y-2.5 border-t border-purple-200/70 pt-4">
-                {specialised.curriculum.map((item, idx) => (
+                {specialised.outcomes.map((item, idx) => (
                   <li
                     key={idx}
                     className="flex items-start gap-2.5 text-sm text-zinc-800"
@@ -222,6 +230,14 @@ export function ProgramCards({ showFullDetails = false }: { showFullDetails?: bo
                   </li>
                 ))}
               </ul>
+
+              <div className="mt-4 flex items-center gap-2 rounded-xl border border-purple-200 bg-white/80 px-3.5 py-2.5 text-xs font-medium text-brand-purple">
+                <Lock className="h-4 w-4 shrink-0 text-brand-goldDark" />
+                <span>
+                  {specialised.courseOutline.length}-Module Male Fashion
+                  Syllabus unlocked upon ₦10,000 registration
+                </span>
+              </div>
             </div>
 
             <div className="mt-6 flex flex-col gap-2">

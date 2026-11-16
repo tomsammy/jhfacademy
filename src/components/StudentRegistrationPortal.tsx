@@ -796,7 +796,8 @@ export function StudentRegistrationPortal() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gold/25 text-[11px]">
               2
             </span>
-            Receipt &amp; Acknowledgement Slip
+            Receipt, Slip &amp; Course Syllabus{" "}
+            {!registrationPayment ? "(Pay ₦10k to Unlock)" : "(Unlocked ✓)"}
           </button>
 
           <button
