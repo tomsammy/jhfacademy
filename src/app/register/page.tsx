@@ -7,7 +7,7 @@ import { SITE_CONFIG } from "@/data/siteData";
 export const metadata: Metadata = {
   title: "Online Student Registration & Tuition Payment Portal",
   description:
-    "Register online for Julian House of Fashion Academy Ilorin (₦10,000 Registration Fee), print your Official Receipt & Acknowledgement Slip with full course outline, and pay tuition in 25% installments via Paystack.",
+    "Register online for Julian House of Fashion Academy Ilorin (₦10,000 Registration Fee), print your Official Receipt & Acknowledgement Slip with full course outline, and pay your training fees online via Paystack.",
   alternates: {
     canonical: `${SITE_CONFIG.domain}/register`,
   },
@@ -24,7 +24,7 @@ export default function RegisterPage() {
               Student Admissions &amp; Paystack Portal
             </span>
             <h1 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-5xl">
-              Online Registration &amp; Flexible 25% Tuition Payment
+              Online Student Registration &amp; Tuition Payment
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-zinc-700 sm:text-base">
               Fill out your admission form and pay the{" "}

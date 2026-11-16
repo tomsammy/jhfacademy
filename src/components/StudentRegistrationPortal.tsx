@@ -194,7 +194,6 @@ export function StudentRegistrationPortal() {
   const [activeView, setActiveView] = useState<"form" | "slip" | "tuition">(
     "form"
   );
-  const [installmentsToPay, setInstallmentsToPay] = useState<number>(1);
   const [customTuitionAmount, setCustomTuitionAmount] = useState<string>("");
   const [includeAccommodationInTuition, setIncludeAccommodationInTuition] =
     useState<boolean>(false);
@@ -313,52 +312,35 @@ export function StudentRegistrationPortal() {
       ? `Other: ${form.programmeOtherText.trim() || "Custom Training"}`
       : selectedProgram.title;
 
-  const quarterTuition = Math.round(selectedProgram.priceNaira / 4);
   const tuitionPaidAmount = useMemo(
     () =>
       tuitionPayments.reduce(
         (sum, p) =>
           sum +
-          (p.installmentsCovered
-            ? p.installmentsCovered * quarterTuition
-            : Math.max(
-                0,
-                p.amountNaira -
-                  (p.accommodationIncluded
-                    ? ADDITIONAL_FEES.accommodationFeePerBlock
-                    : 0)
-              )),
+          Math.max(
+            0,
+            p.amountNaira -
+              (p.accommodationIncluded
+                ? ADDITIONAL_FEES.accommodationFeePerBlock
+                : 0)
+          ),
         0
       ),
-    [tuitionPayments, quarterTuition]
-  );
-  const installmentsPaidCount = useMemo(
-    () =>
-      quarterTuition > 0
-        ? Math.min(4, Math.floor(tuitionPaidAmount / quarterTuition))
-        : 0,
-    [tuitionPaidAmount, quarterTuition]
+    [tuitionPayments]
   );
   const accommodationPaid = useMemo(
     () => tuitionPayments.some((p) => p.accommodationIncluded),
     [tuitionPayments]
   );
 
-  const remainingInstallments = Math.max(0, 4 - installmentsPaidCount);
   const remainingTuitionBalance = Math.max(
     0,
     selectedProgram.priceNaira - tuitionPaidAmount
   );
 
-  useEffect(() => {
-    if (remainingInstallments > 0 && installmentsToPay > remainingInstallments) {
-      setInstallmentsToPay(remainingInstallments);
-    }
-  }, [remainingInstallments, installmentsToPay]);
-
-  const tuitionPayLink = `${originUrl}/register?step=tuition&studentId=${encodeURIComponent(
-    form.studentId || "JHF-STUDENT"
-  )}&program=${encodeURIComponent(selectedProgram.id)}`;
+  const tuitionPayLink = `${originUrl}/pay?program=${encodeURIComponent(
+    selectedProgram.id
+  )}&studentId=${encodeURIComponent(form.studentId || "JHF-STUDENT")}`;
 
   async function verifyRedirectPayment(reference: string) {
     setIsProcessing(true);
@@ -408,10 +390,6 @@ export function StudentRegistrationPortal() {
           "₦10,000 Registration Payment verified! Your Receipt & Acknowledgement Slip are ready to print."
         );
       } else {
-        const installments =
-          Number(data.data?.metadata?.installmentsCovered) ||
-          pendingMeta.installmentsCovered ||
-          1;
         const accIncluded = Boolean(
           data.data?.metadata?.accommodationIncluded ??
             pendingMeta.accommodationIncluded
@@ -423,11 +401,10 @@ export function StudentRegistrationPortal() {
           amountNaira: data.data.amountNaira,
           paidAt: data.data.paidAt,
           channel: data.data.channel,
-          installmentsCovered: installments,
           accommodationIncluded: accIncluded,
-          description: `${selectedProgram.title} — ${
-            installments * 25
-          }% Tuition Installment${accIncluded ? " + Accommodation" : ""}`,
+          description: `${selectedProgram.title} — Tuition Payment (${formatNaira(
+            data.data.amountNaira
+          )})${accIncluded ? " (Includes Accommodation)" : ""}`,
         };
         setTuitionPayments((prev) =>
           prev.some((p) => p.reference === record.reference)
@@ -706,21 +683,15 @@ export function StudentRegistrationPortal() {
     return Number.isFinite(n) && n > 0 ? n : 0;
   }, [customTuitionAmount]);
 
-  const usingCustomTuition = customTuitionAmount.trim().length > 0;
-
   function handleTuitionSubmit() {
-    if (usingCustomTuition && numericCustomTuition < 100) {
+    if (customTuitionAmount.trim().length > 0 && numericCustomTuition < 100) {
       setStatusError(
-        "Please enter a valid custom tuition amount in Naira (minimum ₦100)."
+        "Please enter a valid tuition amount in Naira (minimum ₦100)."
       );
       return;
     }
 
-    const tuitionPart = usingCustomTuition
-      ? numericCustomTuition
-      : installmentsToPay === remainingInstallments
-      ? remainingTuitionBalance
-      : installmentsToPay * quarterTuition;
+    const tuitionPart = numericCustomTuition;
     const accPart =
       includeAccommodationInTuition && !accommodationPaid
         ? ADDITIONAL_FEES.accommodationFeePerBlock
@@ -728,20 +699,24 @@ export function StudentRegistrationPortal() {
     const totalNow = tuitionPart + accPart;
 
     if (totalNow <= 0) {
-      setStatusError("Your course tuition is already paid in full.");
+      setStatusError(
+        "Please enter the training fee amount in Naira (₦) you want to pay."
+      );
       return;
     }
+
+    const desc =
+      tuitionPart > 0
+        ? `${selectedProgram.title} — Tuition Payment (${formatNaira(
+            tuitionPart
+          )})${accPart > 0 ? " + 3-Month Accommodation" : ""}`
+        : `${selectedProgram.title} — 3-Month Student Accommodation`;
 
     void launchPaystackCheckout({
       amountNaira: totalNow,
       purpose: "tuition",
-      installmentsCovered: usingCustomTuition ? 0 : installmentsToPay,
       accommodationIncluded: accPart > 0,
-      description: `${selectedProgram.title} — ${
-        usingCustomTuition
-          ? `Custom Amount (${formatNaira(tuitionPart)})`
-          : `${installmentsToPay * 25}% Tuition Payment`
-      }${accPart > 0 ? " + 3-Month Accommodation" : ""}`,
+      description: desc,
     });
   }
 
@@ -773,16 +748,7 @@ export function StudentRegistrationPortal() {
     setActiveView("form");
   }
 
-  const presetTuitionPart =
-    remainingInstallments > 0
-      ? installmentsToPay === remainingInstallments
-        ? remainingTuitionBalance
-        : installmentsToPay * quarterTuition
-      : 0;
-
-  const activeTuitionPart = usingCustomTuition
-    ? numericCustomTuition
-    : presetTuitionPart;
+  const activeTuitionPart = numericCustomTuition;
 
   const tuitionSelectedAmount =
     activeTuitionPart +
@@ -846,7 +812,7 @@ export function StudentRegistrationPortal() {
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-gold/25 text-[11px]">
               3
             </span>
-            Pay Course Tuition (25% × 4)
+            Pay Course Tuition
           </button>
         </div>
 
@@ -1319,11 +1285,11 @@ export function StudentRegistrationPortal() {
                 </p>
               )}
 
-              {/* 4-Installment Tuition Preview */}
+              {/* Course Tuition Preview */}
               {form.programmeChoice !== "other" && (
                 <div className="mt-5 rounded-2xl bg-white/10 p-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-brand-gold">
-                    Course Tuition Plan (25% × 4 Installments)
+                    Course Tuition &amp; Syllabus Unlock
                   </p>
                   <div className="mt-2 flex items-baseline justify-between border-b border-white/15 pb-2 text-sm">
                     <span className="text-purple-100">Total Tuition:</span>
@@ -1331,17 +1297,11 @@ export function StudentRegistrationPortal() {
                       {selectedProgram.priceFormatted}
                     </span>
                   </div>
-                  <div className="mt-2 flex items-baseline justify-between text-xs text-purple-100">
-                    <span>4 Equal Installments (25% each):</span>
-                    <span className="font-bold text-white">
-                      {formatNaira(quarterTuition)} × 4
-                    </span>
-                  </div>
                   <p className="mt-2 text-[11px] text-purple-200">
                     Once you submit &amp; pay the ₦10,000 Registration Form fee,
                     you will print your official Receipt and Acknowledgement
                     Slip with the full Course Outline and a direct link to pay
-                    your tuition.
+                    any tuition amount online.
                   </p>
                 </div>
               )}
@@ -1412,7 +1372,7 @@ export function StudentRegistrationPortal() {
                 }}
                 className="inline-flex items-center gap-2 rounded-xl bg-brand-gold px-5 py-3 text-sm font-bold text-zinc-950 transition hover:bg-amber-300"
               >
-                Pay Course Tuition (25% × 4)
+                Pay Course Tuition
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
@@ -1608,10 +1568,7 @@ export function StudentRegistrationPortal() {
                 <strong>Level:</strong> {selectedProgram.level} &nbsp;|&nbsp;{" "}
                 <strong>Duration:</strong> {selectedProgram.duration} &nbsp;|&nbsp;{" "}
                 <strong>Total Course Tuition:</strong>{" "}
-                {selectedProgram.priceFormatted}{" "}
-                <span className="text-zinc-500">
-                  (4×25% installments of {formatNaira(quarterTuition)})
-                </span>
+                {selectedProgram.priceFormatted}
               </p>
               <p className="mt-1.5 text-sm text-zinc-600">
                 {selectedProgram.summary}
@@ -1694,55 +1651,43 @@ export function StudentRegistrationPortal() {
               </div>
             </div>
 
-            {/* 25% × 4 Tuition Payment Schedule */}
+            {/* Course Tuition Summary */}
             <div className="mt-7">
               <h4 className="font-serif text-xl font-bold text-zinc-950">
-                Course Tuition Payment Schedule (25% Four Times)
+                Course Tuition Summary
               </h4>
               <p className="mt-1 text-xs text-zinc-600">
-                Total Tuition for {selectedProgram.title}:{" "}
-                <strong>{selectedProgram.priceFormatted}</strong> — structured
-                into four 25% installments of{" "}
-                <strong>{formatNaira(quarterTuition)}</strong> each (or payable
-                in full).
+                Pay any amount towards your course tuition online whenever you
+                are ready using your direct payment link below.
               </p>
 
               <div className="mt-3 overflow-hidden rounded-2xl border border-purple-200">
                 <table className="w-full text-left text-sm">
                   <thead className="bg-brand-purple text-xs uppercase text-white">
                     <tr>
-                      <th className="px-4 py-2.5">Installment</th>
-                      <th className="px-4 py-2.5">Share</th>
-                      <th className="px-4 py-2.5">Amount</th>
-                      <th className="px-4 py-2.5">Status</th>
+                      <th className="px-4 py-2.5">Programme Enrolled</th>
+                      <th className="px-4 py-2.5">Total Course Tuition</th>
+                      <th className="px-4 py-2.5">Tuition Paid So Far</th>
+                      <th className="px-4 py-2.5 text-right">
+                        Remaining Balance
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-purple-100">
-                    {[1, 2, 3, 4].map((num) => {
-                      const isPaid = installmentsPaidCount >= num;
-                      return (
-                        <tr key={num}>
-                          <td className="px-4 py-2.5 font-semibold text-zinc-900">
-                            Installment {num} of 4
-                          </td>
-                          <td className="px-4 py-2.5 text-zinc-700">25%</td>
-                          <td className="px-4 py-2.5 font-bold text-brand-purple">
-                            {formatNaira(quarterTuition)}
-                          </td>
-                          <td className="px-4 py-2.5">
-                            {isPaid ? (
-                              <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-                                Paid
-                              </span>
-                            ) : (
-                              <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
-                                Pending
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-zinc-900">
+                        {selectedProgram.title} ({selectedProgram.duration})
+                      </td>
+                      <td className="px-4 py-3 font-bold text-zinc-900">
+                        {selectedProgram.priceFormatted}
+                      </td>
+                      <td className="px-4 py-3 font-bold text-emerald-700">
+                        {formatNaira(tuitionPaidAmount)}
+                      </td>
+                      <td className="px-4 py-3 text-right font-bold text-brand-purple">
+                        {formatNaira(remainingTuitionBalance)}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -1793,9 +1738,9 @@ export function StudentRegistrationPortal() {
                     Online Course Tuition Payment Link ({selectedProgram.title})
                   </p>
                   <p className="text-xs text-zinc-700">
-                    Visit your student tuition link whenever you are ready to
-                    pay 25% installments, or use the quick custom-amount payment
-                    link (<strong className="font-mono">{originUrl}/pay</strong>):
+                    Visit your direct payment link whenever you are ready to
+                    pay towards your course tuition (simply enter the amount you
+                    want to pay):
                   </p>
                   <p className="break-all font-mono text-xs font-semibold text-brand-purple underline">
                     {tuitionPayLink}
@@ -1834,22 +1779,21 @@ export function StudentRegistrationPortal() {
         </div>
       )}
 
-      {/* ==================== STAGE 3: COURSE TUITION PAYMENT (25% × 4) ==================== */}
+      {/* ==================== STAGE 3: COURSE TUITION PAYMENT ==================== */}
       {activeView === "tuition" && (
         <div ref={tuitionSectionRef} className="space-y-8">
           <div className="no-print grid gap-8 lg:grid-cols-12">
             <div className="space-y-6 rounded-3xl border border-purple-200 bg-white p-6 shadow-sm lg:col-span-7 sm:p-8">
               <div className="border-b border-purple-100 pb-4">
                 <span className="rounded-full bg-brand-lavender px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-purple">
-                  Step 3 • Flexible 25% × 4 Tuition Payment
+                  Step 3 • Course Tuition Payment
                 </span>
                 <h2 className="mt-2 font-serif text-3xl font-bold text-zinc-950">
                   Pay Course Tuition Online
                 </h2>
                 <p className="mt-1 text-sm text-zinc-600">
-                  Pay for the course you registered for in{" "}
-                  <strong>25% installments (4 times)</strong> or pay multiple
-                  installments at once via Paystack.
+                  Enter the exact Naira amount you wish to pay towards your
+                  course tuition below and pay securely online via Paystack.
                 </p>
               </div>
 
@@ -1898,8 +1842,8 @@ export function StudentRegistrationPortal() {
               <div className="rounded-2xl border border-purple-100 bg-brand-lavender/40 p-4">
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-brand-purple">
-                    Tuition Progress: {installmentsPaidCount * 25}% Paid (
-                    {installmentsPaidCount} of 4 installments)
+                    Tuition Paid: {formatNaira(tuitionPaidAmount)} of{" "}
+                    {selectedProgram.priceFormatted}
                   </span>
                   <span className="text-zinc-700">
                     Balance: {formatNaira(remainingTuitionBalance)}
@@ -1908,93 +1852,47 @@ export function StudentRegistrationPortal() {
                 <div className="mt-2 h-3 w-full overflow-hidden rounded-full bg-purple-200">
                   <div
                     className="h-full rounded-full bg-brand-purple transition-all"
-                    style={{ width: `${installmentsPaidCount * 25}%` }}
+                    style={{
+                      width: `${Math.min(
+                        100,
+                        selectedProgram.priceNaira > 0
+                          ? Math.round(
+                              (tuitionPaidAmount / selectedProgram.priceNaira) *
+                                100
+                            )
+                          : 0
+                      )}%`,
+                    }}
                   />
                 </div>
               </div>
 
-              {remainingInstallments > 0 ? (
-                <div className="space-y-5">
-                  <div>
-                    <label className="mb-2 block text-sm font-bold text-zinc-900">
-                      Select Installments to Pay Now (Each Installment = 25% /{" "}
-                      {formatNaira(quarterTuition)})
-                    </label>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {[1, 2, 3, 4].map((count) => {
-                        const disabled = count > remainingInstallments;
-                        const isSelected =
-                          !usingCustomTuition && installmentsToPay === count;
-                        const amt =
-                          count === remainingInstallments
-                            ? remainingTuitionBalance
-                            : count * quarterTuition;
-                        return (
-                          <button
-                            key={count}
-                            type="button"
-                            disabled={disabled}
-                            onClick={() => {
-                              setCustomTuitionAmount("");
-                              setInstallmentsToPay(count);
-                            }}
-                            className={`rounded-2xl border p-4 text-left transition ${
-                              disabled
-                                ? "cursor-not-allowed border-zinc-100 bg-zinc-50 opacity-50"
-                                : isSelected
-                                ? "border-brand-purple bg-brand-lavender ring-2 ring-brand-purple/25"
-                                : "border-zinc-200 bg-white hover:border-purple-300"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold uppercase tracking-wider text-brand-purple">
-                                {count === 1
-                                  ? "1 Installment (25%)"
-                                  : count === 4
-                                  ? "All 4 Installments (100%)"
-                                  : `${count} Installments (${count * 25}%)`}
-                              </span>
-                              {isSelected && (
-                                <CheckCircle2 className="h-4 w-4 text-brand-purple" />
-                              )}
-                            </div>
-                            <p className="mt-1 font-serif text-2xl font-bold text-zinc-950">
-                              {formatNaira(amt)}
-                            </p>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Custom Amount Input */}
-                  <div className="rounded-2xl border border-purple-200 bg-brand-cream/40 p-4">
-                    <label
-                      htmlFor="tuition-custom-amount"
-                      className="block text-xs font-bold uppercase tracking-wider text-brand-purple"
-                    >
-                      Or Enter Custom Amount to Pay Now (₦)
-                    </label>
-                    <p className="mt-1 text-xs text-zinc-600">
-                      Type any Naira amount you wish to pay toward your training
-                      fees right now (clears automatically if you select a 25%
-                      preset above).
-                    </p>
-                    <div className="relative mt-2.5">
-                      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 font-serif text-lg font-bold text-brand-purple">
-                        ₦
-                      </span>
-                      <input
-                        id="tuition-custom-amount"
-                        type="number"
-                        min={100}
-                        step="any"
-                        value={customTuitionAmount}
-                        onChange={(e) => setCustomTuitionAmount(e.target.value)}
-                        placeholder="e.g. 50000"
-                        className="w-full rounded-xl border border-purple-200 bg-white py-2.5 pl-9 pr-4 text-sm font-bold text-zinc-950 outline-none focus:border-brand-purple"
-                      />
-                    </div>
+              {remainingTuitionBalance > 0 ? (
+                <div className="rounded-2xl border-2 border-brand-purple/25 bg-brand-cream/40 p-5">
+                  <label
+                    htmlFor="tuition-custom-amount"
+                    className="block text-sm font-bold text-brand-purple"
+                  >
+                    Enter Amount You Want to Pay Now (₦) *
+                  </label>
+                  <p className="mt-1 text-xs text-zinc-600">
+                    Type any Naira amount you wish to pay towards your training
+                    fees right now via Paystack.
+                  </p>
+                  <div className="relative mt-3">
+                    <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 font-serif text-2xl font-bold text-brand-purple">
+                      ₦
+                    </span>
+                    <input
+                      id="tuition-custom-amount"
+                      type="number"
+                      min={100}
+                      step="any"
+                      value={customTuitionAmount}
+                      onChange={(e) => setCustomTuitionAmount(e.target.value)}
+                      placeholder="e.g. 50000"
+                      className="w-full rounded-xl border-2 border-purple-200 bg-white py-3.5 pl-11 pr-4 font-serif text-2xl font-bold text-zinc-950 outline-none transition focus:border-brand-purple"
+                    />
                   </div>
                 </div>
               ) : (
@@ -2052,13 +1950,7 @@ export function StudentRegistrationPortal() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-purple-100">
-                      Paying Now (
-                      {usingCustomTuition
-                        ? "Custom Amount"
-                        : `${installmentsToPay * 25}%`}
-                      )
-                    </span>
+                    <span className="text-purple-100">Paying Now</span>
                     <span className="font-semibold">
                       {activeTuitionPart > 0
                         ? formatNaira(activeTuitionPart)

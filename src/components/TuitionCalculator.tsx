@@ -292,9 +292,12 @@ export function TuitionCalculator() {
               <MessageCircle className="h-4 w-4" />
               Or Send Estimate on WhatsApp
             </a>
-            <p className="text-center text-[11px] text-purple-200">
-              Tuition can be paid in 4 × 25% installments via Paystack
-            </p>
+            <Link
+              href={`/pay?program=${selectedProgram.id}`}
+              className="block text-center text-xs font-semibold text-brand-gold underline-offset-2 hover:underline"
+            >
+              Already registered? Pay any training fee amount online →
+            </Link>
           </div>
         </div>
       </div>

@@ -395,34 +395,6 @@ export function TrainingFeePaymentPortal() {
     }
   }
 
-  const quickAmounts = useMemo(() => {
-    if (selectedProgram) {
-      const q = Math.round(selectedProgram.priceNaira / 4);
-      const h = Math.round(selectedProgram.priceNaira / 2);
-      return [
-        { label: `25% (${formatNaira(q)})`, value: q },
-        { label: `50% (${formatNaira(h)})`, value: h },
-        {
-          label: `Full (${formatNaira(selectedProgram.priceNaira)})`,
-          value: selectedProgram.priceNaira,
-        },
-        { label: "₦50,000", value: 50000 },
-      ];
-    }
-    if (programId === "accommodation") {
-      return [{ label: "₦50,000 (3 Mos)", value: 50000 }];
-    }
-    if (programId === "registration") {
-      return [{ label: "₦10,000 (Reg Fee)", value: 10000 }];
-    }
-    return [
-      { label: "₦25,000", value: 25000 },
-      { label: "₦50,000", value: 50000 },
-      { label: "₦100,000", value: 100000 },
-      { label: "₦150,000", value: 150000 },
-    ];
-  }, [programId, selectedProgram]);
-
   return (
     <div className="space-y-8">
       {/* Shareable Direct Payment Link Bar */}
@@ -516,22 +488,6 @@ export function TrainingFeePaymentPortal() {
                 placeholder="e.g. 50000"
                 className="w-full rounded-xl border-2 border-purple-200 bg-white py-3.5 pl-11 pr-4 font-serif text-2xl font-bold text-zinc-950 outline-none transition focus:border-brand-purple"
               />
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold text-zinc-600">
-                Quick-fill:
-              </span>
-              {quickAmounts.map((q) => (
-                <button
-                  key={q.label}
-                  type="button"
-                  onClick={() => setAmountInput(String(q.value))}
-                  className="rounded-full border border-purple-200 bg-white px-3 py-1 text-xs font-bold text-brand-purple transition hover:bg-brand-purple hover:text-white"
-                >
-                  {q.label}
-                </button>
-              ))}
             </div>
           </div>
 
