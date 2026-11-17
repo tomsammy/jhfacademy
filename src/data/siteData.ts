@@ -588,49 +588,40 @@ export const INTAKE_BATCHES = [
 
 export const LOOKBOOK_ITEMS: LookbookItem[] = [
   {
-    id: "bridal-fringe",
-    title: "Off-Shoulder Bridal Reception Dress",
-    category: "Bridals & Reception",
-    image: "/images/outfit-bridal-white.png",
-    description:
-      "Sculpted white crepe silhouette featuring an architectural off-shoulder wrap, crimson fringe detailing, and floral couture accent.",
-    techniqueTag: "Pattern Drafting & Bustier Contouring",
-  },
-  {
     id: "asoebi-turquoise",
-    title: "Turquoise Beaded Lace Aso-Ebi",
+    title: "Turquoise & Silver Beaded Lace Aso-Ebi",
     category: "Aso-Ebi & Lace",
-    image: "/images/outfit-asoebi-2.png",
+    image: "/images/editorial/asoebi-turquoise-beaded-lace.jpg",
     description:
-      "Custom illusion-neckline beaded lace corset paired with structured floral shoulder applique and matching royal blue gele styling.",
-    techniqueTag: "Corsetry & Illusion Lace Applique",
+      "Custom illusion-neckline beaded lace corset engineered with geometric silver latticework, floral shoulder appliqué, and royal turquoise gele styling.",
+    techniqueTag: "Corsetry & Illusion Lace Appliqué",
   },
   {
-    id: "staircase-evening",
-    title: "Teal & Sequin Illusion Evening Gown",
-    category: "Bridals & Reception",
-    image: "/images/jhf-profile-gown.png",
+    id: "atelier-navy-brocade",
+    title: "Architectural Navy Vest & Brocade Palazzo",
+    category: "Blazers & Suits",
+    image: "/images/editorial/director-navy-atelier-standing.jpg",
     description:
-      "Floor-length mermaid evening gown combining teal scuba draping, black sequin paneling, and sheer illusion sleeves.",
-    techniqueTag: "Draping & Structured Gown Construction",
+      "Longline navy satin-lapel sleeveless vest paired with woven navy-and-gold brocade wide-leg trousers and structured pillbox headpiece.",
+    techniqueTag: "Longline Lapel & Palazzo Tailoring",
   },
   {
-    id: "ankara-puff",
-    title: "Royal Purple & Azure Puff-Sleeve Dress",
+    id: "lime-draped-boubou",
+    title: "Chartreuse Draped Silk Kimono-Boubou",
     category: "Aso-Oke & Traditional",
-    image: "/images/outfit-ankara-purple.png",
+    image: "/images/editorial/director-lime-draped-boubou.jpg",
     description:
-      "Statement square-neckline print dress engineered with voluminous structured puff sleeves, peaked collar trim, and matching headpiece.",
-    techniqueTag: "Sleeve Architecture & Bodice Fit",
+      "Luminous emerald-lime fluid silk boubou top sculpted with asymmetric front cowling and paired with matching tailored trousers.",
+    techniqueTag: "Fluid Draping & Contemporary Boubou",
   },
   {
-    id: "asoebi-twin",
-    title: "Ceremonial Aso-Ebi & Gele Ensemble",
-    category: "Aso-Ebi & Lace",
-    image: "/images/outfit-asoebi-1.png",
+    id: "hotpink-reception-cape",
+    title: "Pearl-Beaded Reception Dress with Split Cape",
+    category: "Bridals & Reception",
+    image: "/images/students/student-hotpink-cape-wings.jpg",
     description:
-      "Bespoke wedding guest and bridal train couture crafted with precision boning for effortless comfort from morning vows to reception.",
-    techniqueTag: "Custom Corset Engineering",
+      "Structured hot-pink reception midi dress adorned with hand-stitched pearl-trimmed neckline and sweeping split floor-length cape sleeves.",
+    techniqueTag: "Couture Beading & Cape Architecture",
   },
   {
     id: "corporate-blazers",
@@ -638,16 +629,34 @@ export const LOOKBOOK_ITEMS: LookbookItem[] = [
     category: "Blazers & Suits",
     image: "/images/students/student-emerald-suit-logo.jpg",
     description:
-      "Power-tailored notched-lapel blazers, two-piece trouser suits, and crisp lined office separates taught in our Advanced module and available for bespoke order.",
+      "Power-tailored double-breasted blazers, two-piece trouser suits, and crisp lined office separates taught in our Advanced module and available for bespoke order.",
     techniqueTag: "Two-Piece Sleeve & Lapel Tailoring",
+  },
+  {
+    id: "lilac-ruffle-reception",
+    title: "Lilac Pearl-Trimmed Reception Gown",
+    category: "Bridals & Reception",
+    image: "/images/students/student-lilac-pearl-ruffle-dress.jpg",
+    description:
+      "Sculpted lilac reception dress featuring pearl-beaded collar detailing and a dramatic diagonal cascading ruffle over fitted midi lines.",
+    techniqueTag: "Pattern Contouring & Asymmetric Flounce",
+  },
+  {
+    id: "atelier-seated-bespoke",
+    title: "Studio Atelier Two-Piece & Brocade Edit",
+    category: "Blazers & Suits",
+    image: "/images/editorial/director-navy-atelier-seated.jpg",
+    description:
+      "Signature Julian House of Fashion atelier look combining clean notched outerwear, gold brocade drape, and timeless millinery.",
+    techniqueTag: "Atelier Pattern Architecture",
   },
   {
     id: "menswear-senator",
     title: "Bespoke Senator Suits & Agbada",
     category: "Male Fashion",
-    image: "/images/jhf-logo-crop.png",
+    image: "",
     description:
-      "Sharp placket lines, structured senator silhouettes, kaftans, and bespoke tailored trousers built in our 4-month Male Fashion Design track and custom menswear studio.",
+      "Sharp placket lines, structured senator silhouettes, kaftans, and bespoke tailored trousers built in our Male Fashion Design track and custom menswear studio.",
     techniqueTag: "Specialised Menswear Tailoring",
   },
 ];

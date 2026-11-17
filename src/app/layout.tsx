@@ -55,9 +55,9 @@ export const metadata: Metadata = {
       "Building skills. Transforming lives through fashion education. Structured 3-month, 4-month & 9-month hands-on fashion design training off Basin Road, Ilorin.",
     images: [
       {
-        url: "/images/jhf-banner-showcase.png",
-        width: 1200,
-        height: 630,
+        url: "/images/editorial/director-navy-atelier-seated.jpg",
+        width: 1024,
+        height: 1280,
         alt: "Julian House of Fashion Academy Bespoke Couture & Fashion School Ilorin",
       },
     ],
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     title: "Julian House of Fashion Academy — Ilorin, Kwara State",
     description:
       "Building skills. Transforming lives through fashion education. Enroll in Foundational, Intermediate, Advanced, 9-Month Full Programme, or Male Fashion Design.",
-    images: ["/images/jhf-banner-showcase.png"],
+    images: ["/images/editorial/director-navy-atelier-seated.jpg"],
   },
 };
 

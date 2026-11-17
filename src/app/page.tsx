@@ -93,12 +93,21 @@ export default function HomePage() {
             {/* Right Visual Showcase */}
             <div className="lg:col-span-6">
               <div className="relative mx-auto max-w-xl">
-                <div className="overflow-hidden rounded-3xl border-4 border-white bg-brand-lavender shadow-2xl shadow-purple-900/15">
-                  <img
-                    src="/images/jhf-banner-showcase.png"
-                    alt="Julian House of Fashion bespoke bridal gown, beaded Aso-Ebi lace, and Ankara dresses in Ilorin"
-                    className="h-auto w-full object-cover"
-                  />
+                <div className="grid grid-cols-2 gap-3.5 rounded-3xl border-4 border-white bg-white p-2 shadow-2xl shadow-purple-900/15 sm:gap-4 sm:p-2.5">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-lavender">
+                    <img
+                      src="/images/editorial/director-navy-atelier-seated.jpg"
+                      alt="Julian House of Fashion Creative Director seated in bespoke navy velvet vest and gold brocade trousers in the atelier"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  </div>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-brand-lavender">
+                    <img
+                      src="/images/editorial/asoebi-turquoise-beaded-lace.jpg"
+                      alt="Bespoke turquoise and silver beaded illusion lace Aso-Ebi gown crafted by Julian House of Fashion Ilorin"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  </div>
                 </div>
 
                 {/* Floating Founder & Craft Badge */}

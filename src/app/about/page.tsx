@@ -68,11 +68,13 @@ export default function AboutPage() {
 
             <div className="lg:col-span-5">
               <div className="mx-auto max-w-sm overflow-hidden rounded-3xl border-4 border-white bg-brand-lavender shadow-2xl">
-                <img
-                  src="/images/jhf-profile-gown.png"
-                  alt="Julian House of Fashion couture craftsmanship by Julihana Tomori"
-                  className="h-auto w-full object-cover"
-                />
+                <div className="aspect-[4/5] w-full overflow-hidden">
+                  <img
+                    src="/images/editorial/director-navy-closeup-portrait.jpg"
+                    alt="Julihana Tomori, Founder and Creative Director of Julian House of Fashion Academy in Ilorin"
+                    className="h-full w-full object-cover object-top"
+                  />
+                </div>
                 <div className="bg-brand-purple p-5 text-white">
                   <p className="text-xs font-bold uppercase tracking-widest text-brand-gold">
                     Founder &amp; Creative Director

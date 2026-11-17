@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { LOOKBOOK_ITEMS, buildWhatsAppUrl } from "@/data/siteData";
 
 const CATEGORIES = [
@@ -61,8 +62,15 @@ export function LookbookGallery({ limit }: { limit?: number }) {
                   className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105"
                 />
               ) : (
-                <div className="flex h-full items-center justify-center p-6 text-center text-brand-purple">
-                  <Sparkles className="h-10 w-10" />
+                <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-brand-purple via-brand-violet to-zinc-950 p-8 text-center">
+                  <BrandLogo variant="light" />
+                  <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-brand-gold">
+                    Custom Menswear Atelier
+                  </p>
+                  <p className="mt-2 max-w-[14rem] text-xs leading-relaxed text-purple-100">
+                    Senator wear, Kaftans, Agbada &amp; structured male shirts —
+                    tailored to exact anatomical measurements.
+                  </p>
                 </div>
               )}
               <div className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-brand-purple shadow-sm backdrop-blur">
