@@ -219,8 +219,8 @@ export default function HomePage() {
             <div className="lg:col-span-5">
               <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border-2 border-white shadow-xl">
                 <img
-                  src="/images/next-stitch/next-stitch-banner.jpg"
-                  alt="The Next Stitch Initiative by Julian House of Fashion giving out two sewing machines to one deserving young girl"
+                  src="/images/next-stitch/next-stitch-flier-qr.png"
+                  alt="The Next Stitch Initiative by Julian House of Fashion giving out two sewing machines to one deserving young girl, with QR code"
                   className="h-auto w-full object-cover"
                 />
               </div>

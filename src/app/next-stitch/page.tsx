@@ -9,6 +9,7 @@ import {
   MapPin,
   ArrowDown,
   ShieldCheck,
+  Download,
 } from "lucide-react";
 import { NextStitchForm } from "@/components/NextStitchForm";
 import { SITE_CONFIG, buildWhatsAppUrl } from "@/data/siteData";
@@ -103,10 +104,20 @@ export default function NextStitchPage() {
             <div className="lg:col-span-5">
               <div className="mx-auto max-w-md overflow-hidden rounded-3xl border-4 border-white bg-white shadow-2xl shadow-purple-900/15">
                 <img
-                  src="/images/next-stitch/next-stitch-banner.jpg"
-                  alt="JHF Fashion Empowerment Initiative — The Next Stitch Initiative giving two sewing machines to one deserving young girl"
+                  src="/images/next-stitch/next-stitch-flier-qr.png"
+                  alt="JHF Fashion Empowerment Initiative — The Next Stitch Initiative giving two sewing machines to one deserving young girl, with QR code"
                   className="h-auto w-full object-cover"
                 />
+              </div>
+              <div className="mt-3 flex flex-wrap justify-center gap-2.5">
+                <a
+                  href="/images/next-stitch/next-stitch-flier-qr.png"
+                  download="JHF-Next-Stitch-Initiative-QR-Flier.png"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-brand-purple shadow-sm transition hover:bg-brand-lavender"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Download Shareable Flier (QR)
+                </a>
               </div>
             </div>
           </div>
@@ -212,10 +223,20 @@ export default function NextStitchPage() {
             <div className="lg:col-span-5">
               <div className="mx-auto max-w-md overflow-hidden rounded-3xl border-4 border-white bg-white shadow-xl">
                 <img
-                  src="/images/next-stitch/who-is-qualified.jpg"
-                  alt="Who is qualified for The Next Stitch Initiative — young girl learning tailoring"
+                  src="/images/next-stitch/who-is-qualified-flier-qr.png"
+                  alt="Who is qualified for The Next Stitch Initiative — young girl learning tailoring, with QR code"
                   className="h-auto w-full object-cover"
                 />
+              </div>
+              <div className="mt-3 flex flex-wrap justify-center gap-2.5">
+                <a
+                  href="/images/next-stitch/who-is-qualified-flier-qr.png"
+                  download="JHF-Who-Is-Qualified-QR-Flier.png"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-brand-purple shadow-sm transition hover:bg-brand-lavender"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  Download Eligibility Flier (QR)
+                </a>
               </div>
             </div>
           </div>
