@@ -114,6 +114,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  href="/next-stitch"
+                  className="font-semibold text-brand-gold hover:underline"
+                >
+                  The Next Stitch Initiative
+                </Link>
+              </li>
+              <li>
                 <Link href="/couture" className="hover:text-brand-gold">
                   Bespoke Bridals, Aso-Ebi & Blazers
                 </Link>
@@ -126,6 +134,11 @@ export function Footer() {
               <li>
                 <Link href="/contact" className="hover:text-brand-gold">
                   Admissions & Ilorin Directions
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="text-zinc-400 hover:text-brand-gold">
+                  Admin Login
                 </Link>
               </li>
               <li className="pt-2">

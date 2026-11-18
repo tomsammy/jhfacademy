@@ -32,9 +32,14 @@ export function Navbar() {
           </span>
           <span className="hidden text-purple-300 md:inline">•</span>
           <span className="font-medium">
-            Admissions Open • Reg: {ADDITIONAL_FEES.registrationFormatted} •
-            Accommodation Available ({ADDITIONAL_FEES.accommodationFormatted}/3 mos)
+            Admissions Open • Reg: {ADDITIONAL_FEES.registrationFormatted}
           </span>
+          <Link
+            href="/next-stitch"
+            className="inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-brand-gold transition hover:bg-white/20"
+          >
+            The Next Stitch Initiative (2 Free Machines) →
+          </Link>
           <Link
             href="/register"
             className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2.5 py-0.5 text-xs font-bold text-zinc-950 transition hover:bg-amber-300"
@@ -128,6 +133,17 @@ export function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/next-stitch"
+              onClick={() => setMobileOpen(false)}
+              className={`rounded-lg px-3 py-2.5 text-sm font-semibold ${
+                pathname === "/next-stitch"
+                  ? "bg-brand-lavender text-brand-purple"
+                  : "text-brand-purple hover:bg-purple-50"
+              }`}
+            >
+              The Next Stitch Initiative (Free Machines)
+            </Link>
           </nav>
           <div className="mt-4 grid grid-cols-2 gap-2.5">
             <a

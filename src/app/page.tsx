@@ -181,6 +181,54 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* JHF Fashion Empowerment Initiative: The Next Stitch Banner */}
+      <section className="border-b border-purple-100 bg-white py-12 sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 overflow-hidden rounded-3xl border border-purple-200 bg-gradient-to-br from-brand-lavender via-white to-brand-cream p-6 shadow-md sm:p-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-purple px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-brand-gold">
+                JHF Fashion Empowerment Initiative
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-bold text-zinc-950 sm:text-4xl">
+                The Next Stitch Initiative — Two Sewing Machines for One Deserving Girl
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-700 sm:text-base">
+                Not a social media contest. Know a passionate young girl
+                learning tailoring under a roadside tailor or in a small shop who
+                cannot afford a machine or fashion school? Tell us her story — she
+                doesn&rsquo;t need to be on social media, and we are willing to
+                reach wherever she is.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/next-stitch#share-story"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-6 py-3 text-sm font-bold text-white shadow-md transition hover:bg-brand-violet"
+                >
+                  Share Her Story / Nominate Now
+                  <ArrowRight className="h-4 w-4 text-brand-gold" />
+                </Link>
+                <Link
+                  href="/next-stitch"
+                  className="inline-flex items-center gap-2 rounded-full border border-brand-purple bg-white px-5 py-3 text-sm font-bold text-brand-purple transition hover:bg-brand-lavender"
+                >
+                  Read The Inspiration &amp; Criteria
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border-2 border-white shadow-xl">
+                <img
+                  src="/images/next-stitch/next-stitch-banner.jpg"
+                  alt="The Next Stitch Initiative by Julian House of Fashion giving out two sewing machines to one deserving young girl"
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Training Programme & Fees Section */}
       <section id="programs" className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
