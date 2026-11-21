@@ -64,7 +64,8 @@ export function LocationMapSection() {
                   <div>
                     <p className="font-bold text-zinc-900">Studio Hours</p>
                     <p className="text-zinc-600">
-                      Mon – Fri: 9:00 AM – 5:00 PM • Sat: 10:00 AM – 4:00 PM
+                      Mon – Fri: 9:00 AM – 5:00 PM • Weekends: Closed (Bookings by
+                      Appointment)
                     </p>
                   </div>
                 </div>

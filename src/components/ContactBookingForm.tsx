@@ -38,11 +38,13 @@ export function ContactBookingForm() {
   return (
     <div className="rounded-3xl border border-purple-200 bg-white p-6 shadow-sm sm:p-8">
       <h2 className="font-serif text-2xl font-bold text-zinc-900 sm:text-3xl">
-        Send an Admission or Couture Inquiry
+        Book an Appointment or Send an Inquiry
       </h2>
       <p className="mt-2 text-sm text-zinc-600">
-        Fill in your details below and send straight to our official studio
-        WhatsApp desk (+234 802 265 3399) or email.
+        All studio visits and consultations are strictly{" "}
+        <strong className="text-brand-purple">by appointment</strong> (Mon – Fri,
+        9:00 AM – 5:00 PM; closed on weekends). Fill in your details below to
+        message our studio desk (+234 802 265 3399).
       </p>
 
       <div className="mt-6 space-y-4">

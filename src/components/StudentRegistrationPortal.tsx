@@ -1623,7 +1623,8 @@ export function StudentRegistrationPortal() {
                     {SITE_CONFIG.address.full}
                   </p>
                   <p className="mt-1 text-xs text-zinc-600">
-                    Mon – Fri: 9:00 AM – 5:00 PM • Sat: 10:00 AM – 4:00 PM
+                    Mon – Fri: 9:00 AM – 5:00 PM • Weekends: Closed (Visits by
+                    Appointment)
                   </p>
                   <ul className="mt-2.5 space-y-1 text-xs text-zinc-700">
                     <li className="flex items-start gap-1.5">

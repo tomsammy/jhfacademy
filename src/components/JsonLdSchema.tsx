@@ -70,12 +70,6 @@ export function JsonLdSchema() {
             opens: "09:00",
             closes: "17:00",
           },
-          {
-            "@type": "OpeningHoursSpecification",
-            dayOfWeek: ["Saturday"],
-            opens: "10:00",
-            closes: "16:00",
-          },
         ],
         sameAs: [SITE_CONFIG.social.facebook, SITE_CONFIG.social.instagram],
         hasOfferCatalog: {

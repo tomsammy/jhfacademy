@@ -97,9 +97,8 @@ export const SITE_CONFIG = {
   whatsappNumber: "2348022653399",
   email: "toluwaetom@gmail.com",
   hours: [
-    { days: "Monday - Friday", time: "9:00 AM - 5:00 PM" },
-    { days: "Saturday", time: "10:00 AM - 4:00 PM" },
-    { days: "Sunday", time: "Closed" },
+    { days: "Monday - Friday", time: "9:00 AM - 5:00 PM (Bookings by Appointment)" },
+    { days: "Saturday & Sunday", time: "Closed (No Weekend Hours)" },
   ],
   social: {
     facebook: "https://web.facebook.com/julianhouseoffashion",
@@ -1097,7 +1096,7 @@ export const LOCAL_FAQS = [
   {
     question: "How do I register for the next intake or book a bespoke outfit?",
     answer:
-      "You can register immediately via WhatsApp or phone call on +234 802 265 3399, email toluwaetom@gmail.com, or visit our studio at 12 Alarape Street, off Basin Road, Ilorin between Monday and Saturday.",
+      "You can register immediately via WhatsApp or phone call on +234 802 265 3399, email toluwaetom@gmail.com, or book an appointment to visit our studio at 12 Alarape Street, off Basin Road, Ilorin between Monday and Friday (closed on weekends).",
   },
 ];
 
