@@ -111,6 +111,7 @@ interface StudentFormState {
   guardianPhone: string;
   heardAbout: string;
   heardAboutOther: string;
+  trainingMode: "physical" | "hybrid";
   programmeChoice: string;
   programmeOtherText: string;
   wantsAccommodation: boolean;
@@ -170,6 +171,7 @@ const DEFAULT_FORM: StudentFormState = {
   guardianPhone: "",
   heardAbout: "Instagram",
   heardAboutOther: "",
+  trainingMode: "physical",
   programmeChoice: "foundational",
   programmeOtherText: "",
   wantsAccommodation: false,
@@ -233,6 +235,10 @@ export function StudentRegistrationPortal() {
     if (typeof window === "undefined") return;
 
     const paramProgram = searchParams.get("program");
+    const paramMode = searchParams.get("mode");
+    const paramName = searchParams.get("name");
+    const paramPhone = searchParams.get("phone");
+    const paramEmail = searchParams.get("email");
     const paramStep = searchParams.get("step");
     const paramRef =
       searchParams.get("reference") || searchParams.get("trxref");
@@ -245,16 +251,44 @@ export function StudentRegistrationPortal() {
       loadedState = null;
     }
 
+    const isHybridParam = paramMode === "hybrid";
+    const hybridValidPrograms = ["foundational", "intermediate", "advanced"];
+
     if (loadedState?.form) {
+      const mergedChoice =
+        paramProgram &&
+        PROGRAMME_CHOICES.some((p) => p.id === paramProgram) &&
+        !loadedState.registrationPayment
+          ? paramProgram
+          : loadedState.form.programmeChoice;
+
+      const mergedMode =
+        !loadedState.registrationPayment && isHybridParam
+          ? "hybrid"
+          : loadedState.form.trainingMode || "physical";
+
+      const normalizedChoice =
+        mergedMode === "hybrid" && !hybridValidPrograms.includes(mergedChoice)
+          ? "foundational"
+          : mergedChoice;
+
       const mergedForm: StudentFormState = {
         ...DEFAULT_FORM,
         ...loadedState.form,
-        programmeChoice:
-          paramProgram &&
-          PROGRAMME_CHOICES.some((p) => p.id === paramProgram) &&
-          !loadedState.registrationPayment
-            ? paramProgram
-            : loadedState.form.programmeChoice,
+        trainingMode: mergedMode,
+        programmeChoice: normalizedChoice,
+        fullName:
+          !loadedState.registrationPayment && paramName
+            ? paramName
+            : loadedState.form.fullName,
+        phoneNumber:
+          !loadedState.registrationPayment && paramPhone
+            ? paramPhone
+            : loadedState.form.phoneNumber,
+        emailAddress:
+          !loadedState.registrationPayment && paramEmail
+            ? paramEmail
+            : loadedState.form.emailAddress,
       };
       setForm(mergedForm);
       setRegistrationPayment(loadedState.registrationPayment);
@@ -267,13 +301,24 @@ export function StudentRegistrationPortal() {
         setActiveView("tuition");
       }
     } else {
+      const initialChoice =
+        paramProgram && PROGRAMME_CHOICES.some((p) => p.id === paramProgram)
+          ? paramProgram
+          : DEFAULT_FORM.programmeChoice;
+      const initialMode = isHybridParam ? "hybrid" : "physical";
+      const normalizedChoice =
+        initialMode === "hybrid" && !hybridValidPrograms.includes(initialChoice)
+          ? "foundational"
+          : initialChoice;
+
       setForm((prev) => ({
         ...prev,
         studentId: prev.studentId || generateStudentId(),
-        programmeChoice:
-          paramProgram && PROGRAMME_CHOICES.some((p) => p.id === paramProgram)
-            ? paramProgram
-            : prev.programmeChoice,
+        trainingMode: initialMode,
+        programmeChoice: normalizedChoice,
+        fullName: paramName || prev.fullName,
+        phoneNumber: paramPhone || prev.phoneNumber,
+        emailAddress: paramEmail || prev.emailAddress,
       }));
       if (paramStep === "tuition") {
         setActiveView("tuition");
@@ -310,6 +355,8 @@ export function StudentRegistrationPortal() {
   const programmeDisplayTitle =
     form.programmeChoice === "other"
       ? `Other: ${form.programmeOtherText.trim() || "Custom Training"}`
+      : form.trainingMode === "hybrid"
+      ? `Hybrid Training Programme — ${selectedProgram.title}`
       : selectedProgram.title;
 
   const tuitionPaidAmount = useMemo(
@@ -1028,11 +1075,91 @@ export function StudentRegistrationPortal() {
 
               <div>
                 <label className="mb-2 block text-sm font-semibold text-zinc-900">
-                  7. Which programme are you enrolling for?{" "}
+                  7a. Select Training Mode{" "}
+                  <span className="text-red-600">*</span>
+                </label>
+                <div className="mb-4 grid gap-3 sm:grid-cols-2">
+                  <label
+                    className={`flex cursor-pointer items-start gap-2.5 rounded-xl border p-3.5 text-sm transition ${
+                      form.trainingMode === "physical"
+                        ? "border-brand-purple bg-brand-lavender ring-1 ring-brand-purple/20"
+                        : "border-zinc-200 hover:border-purple-200"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="trainingMode"
+                      value="physical"
+                      checked={form.trainingMode === "physical"}
+                      onChange={() =>
+                        setForm({ ...form, trainingMode: "physical" })
+                      }
+                      className="mt-1 h-4 w-4 text-brand-purple"
+                    />
+                    <span>
+                      <strong className="block text-zinc-950">
+                        Regular Physical Training
+                      </strong>
+                      <span className="text-xs text-zinc-600">
+                        Full-time in-studio classes (Mon–Fri)
+                      </span>
+                    </span>
+                  </label>
+
+                  <label
+                    className={`flex cursor-pointer items-start gap-2.5 rounded-xl border p-3.5 text-sm transition ${
+                      form.trainingMode === "hybrid"
+                        ? "border-brand-purple bg-brand-lavender ring-1 ring-brand-purple/20"
+                        : "border-zinc-200 hover:border-purple-200"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="trainingMode"
+                      value="hybrid"
+                      checked={form.trainingMode === "hybrid"}
+                      onChange={() => {
+                        const validHybrid = [
+                          "foundational",
+                          "intermediate",
+                          "advanced",
+                        ];
+                        setForm({
+                          ...form,
+                          trainingMode: "hybrid",
+                          programmeChoice: validHybrid.includes(
+                            form.programmeChoice
+                          )
+                            ? form.programmeChoice
+                            : "foundational",
+                        });
+                      }}
+                      className="mt-1 h-4 w-4 text-brand-purple"
+                    />
+                    <span>
+                      <strong className="block text-brand-purple">
+                        Hybrid Training Programme
+                      </strong>
+                      <span className="text-xs text-zinc-600">
+                        Online lessons, video tutorials &amp; weekly physical
+                        session
+                      </span>
+                    </span>
+                  </label>
+                </div>
+
+                <label className="mb-2 block text-sm font-semibold text-zinc-900">
+                  7b. Which programme are you enrolling for?{" "}
                   <span className="text-red-600">*</span>
                 </label>
                 <div className="space-y-2">
-                  {PROGRAMME_CHOICES.map((prog) => (
+                  {PROGRAMME_CHOICES.filter((prog) =>
+                    form.trainingMode === "hybrid"
+                      ? ["foundational", "intermediate", "advanced"].includes(
+                          prog.id
+                        )
+                      : true
+                  ).map((prog) => (
                     <label
                       key={prog.id}
                       className={`flex cursor-pointer items-center justify-between gap-3 rounded-xl border px-4 py-3 text-sm transition ${

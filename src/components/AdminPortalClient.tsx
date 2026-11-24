@@ -23,8 +23,15 @@ import {
   AlertTriangle,
   Database,
   ExternalLink,
+  GraduationCap,
+  Heart,
 } from "lucide-react";
-import type { NextStitchStatus, NextStitchStory } from "@/lib/db";
+import type {
+  HybridApplication,
+  NextStitchStatus,
+  NextStitchStory,
+} from "@/lib/db";
+import { AdminHybridPanel } from "@/components/AdminHybridPanel";
 
 const STATUS_META: Record<
   NextStitchStatus,
@@ -95,10 +102,18 @@ export function AdminPortalClient() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
+  const [activeSection, setActiveSection] = useState<"hybrid" | "next-stitch">(
+    "hybrid"
+  );
+
   const [stories, setStories] = useState<NextStitchStory[]>([]);
   const [storageMode, setStorageMode] = useState<string>("");
   const [loadingStories, setLoadingStories] = useState(false);
   const [storiesError, setStoriesError] = useState<string | null>(null);
+
+  const [hybridApps, setHybridApps] = useState<HybridApplication[]>([]);
+  const [loadingHybrid, setLoadingHybrid] = useState(false);
+  const [hybridError, setHybridError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -140,6 +155,32 @@ export function AdminPortalClient() {
     }
   }, []);
 
+  const fetchHybridApps = useCallback(async () => {
+    setLoadingHybrid(true);
+    setHybridError(null);
+    try {
+      const res = await fetch("/api/admin/hybrid", { cache: "no-store" });
+      const data = await res.json();
+      if (res.status === 401) {
+        setAuthenticated(false);
+        return;
+      }
+      if (!res.ok) {
+        setHybridError(data?.error || "Failed to load Hybrid applications.");
+        return;
+      }
+      const list = Array.isArray(data.applications)
+        ? (data.applications as HybridApplication[])
+        : [];
+      setHybridApps(list);
+      if (data.storageMode) setStorageMode(data.storageMode);
+    } catch {
+      setHybridError("Network error loading Hybrid applications.");
+    } finally {
+      setLoadingHybrid(false);
+    }
+  }, []);
+
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -148,7 +189,7 @@ export function AdminPortalClient() {
         setConfigured(Boolean(data.configured));
         setAuthenticated(Boolean(data.authenticated));
         if (data.authenticated) {
-          await fetchStories();
+          await Promise.all([fetchStories(), fetchHybridApps()]);
         }
       } catch {
         setLoginError("Could not reach server.");
@@ -157,7 +198,7 @@ export function AdminPortalClient() {
       }
     };
     checkSession();
-  }, [fetchStories]);
+  }, [fetchStories, fetchHybridApps]);
 
   const selectedStory = useMemo(
     () => stories.find((s) => s.id === selectedId) || null,
@@ -189,7 +230,7 @@ export function AdminPortalClient() {
       }
       setPassword("");
       setAuthenticated(true);
-      await fetchStories();
+      await Promise.all([fetchStories(), fetchHybridApps()]);
     } catch {
       setLoginError("Network issue signing in.");
     } finally {
@@ -201,6 +242,7 @@ export function AdminPortalClient() {
     await fetch("/api/admin/logout", { method: "POST" });
     setAuthenticated(false);
     setStories([]);
+    setHybridApps([]);
     setSelectedId(null);
   };
 
@@ -451,47 +493,55 @@ export function AdminPortalClient() {
             </span>
           </div>
           <h1 className="mt-2 font-serif text-2xl font-bold text-zinc-950 sm:text-3xl">
-            The Next Stitch Initiative — Submissions &amp; Stories
+            {activeSection === "hybrid"
+              ? "Hybrid Training Programme — Applications"
+              : "The Next Stitch Initiative — Submissions & Stories"}
           </h1>
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          <a
-            href="/images/next-stitch/next-stitch-flier-qr.png"
-            download="JHF-Next-Stitch-Initiative-QR-Flier.png"
-            className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-900 transition hover:bg-amber-100"
-          >
-            <Download className="h-3.5 w-3.5" />
-            Download QR Flier
-          </a>
-          <Link
-            href="/next-stitch"
-            target="_blank"
-            className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-brand-purple transition hover:bg-brand-lavender"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-            Public Page
-          </Link>
-          <button
-            type="button"
-            onClick={fetchStories}
-            disabled={loadingStories}
-            className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-zinc-700 transition hover:bg-brand-lavender"
-          >
-            <RefreshCw
-              className={`h-3.5 w-3.5 ${loadingStories ? "animate-spin" : ""}`}
-            />
-            Refresh
-          </button>
-          <button
-            type="button"
-            onClick={exportCsv}
-            disabled={filteredStories.length === 0}
-            className="inline-flex items-center gap-1.5 rounded-full bg-brand-purple px-4 py-2 text-xs font-bold text-white transition hover:bg-brand-violet disabled:opacity-50"
-          >
-            <Download className="h-3.5 w-3.5 text-brand-gold" />
-            Export CSV
-          </button>
+          {activeSection === "next-stitch" && (
+            <>
+              <a
+                href="/images/next-stitch/next-stitch-flier-qr.png"
+                download="JHF-Next-Stitch-Initiative-QR-Flier.png"
+                className="inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-900 transition hover:bg-amber-100"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Download QR Flier
+              </a>
+              <Link
+                href="/next-stitch"
+                target="_blank"
+                className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-brand-purple transition hover:bg-brand-lavender"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                Public Page
+              </Link>
+              <button
+                type="button"
+                onClick={fetchStories}
+                disabled={loadingStories}
+                className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-white px-4 py-2 text-xs font-bold text-zinc-700 transition hover:bg-brand-lavender"
+              >
+                <RefreshCw
+                  className={`h-3.5 w-3.5 ${
+                    loadingStories ? "animate-spin" : ""
+                  }`}
+                />
+                Refresh
+              </button>
+              <button
+                type="button"
+                onClick={exportCsv}
+                disabled={filteredStories.length === 0}
+                className="inline-flex items-center gap-1.5 rounded-full bg-brand-purple px-4 py-2 text-xs font-bold text-white transition hover:bg-brand-violet disabled:opacity-50"
+              >
+                <Download className="h-3.5 w-3.5 text-brand-gold" />
+                Export CSV
+              </button>
+            </>
+          )}
           <button
             type="button"
             onClick={handleLogout}
@@ -502,6 +552,69 @@ export function AdminPortalClient() {
           </button>
         </div>
       </div>
+
+      {/* Portal Section Tabs */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setActiveSection("hybrid")}
+          className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-bold transition sm:text-sm ${
+            activeSection === "hybrid"
+              ? "border-brand-purple bg-brand-purple text-white shadow-md"
+              : "border-purple-200 bg-white text-zinc-700 hover:border-brand-purple hover:text-brand-purple"
+          }`}
+        >
+          <GraduationCap className="h-4 w-4 text-brand-gold" />
+          Hybrid Training Applications
+          <span
+            className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${
+              activeSection === "hybrid"
+                ? "bg-white/20 text-white"
+                : "bg-brand-lavender text-brand-purple"
+            }`}
+          >
+            {hybridApps.length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveSection("next-stitch")}
+          className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-bold transition sm:text-sm ${
+            activeSection === "next-stitch"
+              ? "border-brand-purple bg-brand-purple text-white shadow-md"
+              : "border-purple-200 bg-white text-zinc-700 hover:border-brand-purple hover:text-brand-purple"
+          }`}
+        >
+          <Heart className="h-4 w-4 text-brand-gold" />
+          The Next Stitch Initiative
+          <span
+            className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${
+              activeSection === "next-stitch"
+                ? "bg-white/20 text-white"
+                : "bg-brand-lavender text-brand-purple"
+            }`}
+          >
+            {stories.length}
+          </span>
+        </button>
+      </div>
+
+      {activeSection === "hybrid" ? (
+        <AdminHybridPanel
+          applications={hybridApps}
+          loading={loadingHybrid}
+          error={hybridError}
+          onRefresh={fetchHybridApps}
+          onUpdated={(updated) =>
+            setHybridApps((prev) =>
+              prev.map((item) => (item.id === updated.id ? updated : item))
+            )
+          }
+          onError={(msg) => setHybridError(msg)}
+        />
+      ) : (
+        <>
 
       {/* KPI Metrics */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -937,6 +1050,8 @@ export function AdminPortalClient() {
             )}
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

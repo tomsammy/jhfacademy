@@ -124,6 +124,32 @@ export default function AcademyPage() {
       {/* Detailed Programme Cards */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Hybrid Training Banner */}
+          <div className="mb-12 flex flex-col justify-between gap-6 rounded-3xl border border-purple-200 bg-gradient-to-r from-brand-lavender via-white to-brand-cream p-6 shadow-sm sm:p-8 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-purple px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand-gold">
+                Flexible Option • Foundation, Intermediate &amp; Advanced
+              </span>
+              <h2 className="mt-2.5 font-serif text-2xl font-bold text-zinc-950 sm:text-3xl">
+                Hybrid Fashion Training Programme
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-700">
+                <em>Learn flexibly. Practise consistently. Become skilled.</em>{" "}
+                Combines online lessons, assigned video tutorials, independent
+                practical assignments, and a compulsory weekly physical session
+                at our Ilorin academy (Mon–Fri).
+              </p>
+            </div>
+            <div className="shrink-0">
+              <Link
+                href="/hybrid"
+                className="inline-flex items-center gap-2 rounded-full bg-brand-purple px-6 py-3.5 text-sm font-bold text-white shadow-md transition hover:bg-brand-violet"
+              >
+                Apply for Hybrid Training →
+              </Link>
+            </div>
+          </div>
+
           <ProgramCards showFullDetails />
         </div>
       </section>

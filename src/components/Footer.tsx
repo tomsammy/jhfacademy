@@ -95,6 +95,14 @@ export function Footer() {
                   Male Fashion Design — ₦250,000 (4 mos)
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/hybrid"
+                  className="font-semibold text-brand-gold hover:underline"
+                >
+                  Hybrid Training Application (Online + Weekly Studio)
+                </Link>
+              </li>
               <li className="pt-1 text-xs text-zinc-400">
                 Reg Fee: {ADDITIONAL_FEES.registrationFormatted} • Accommodation:{" "}
                 {ADDITIONAL_FEES.accommodationFormatted} / 3 mos
