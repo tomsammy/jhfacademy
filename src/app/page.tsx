@@ -181,6 +181,62 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Upcoming Event Promo: JHF Hangout 2027 */}
+      <section className="bg-gradient-to-r from-purple-950 via-fuchsia-900 to-indigo-950 py-12 text-white sm:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-center gap-8 rounded-3xl border border-amber-300/30 bg-white/10 p-6 backdrop-blur-md sm:p-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider text-zinc-950">
+                Saturday, Jan 9, 2027 • Ilorin &amp; Online
+              </span>
+              <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl">
+                JHF Hangout 2027 — AI &amp; Tech Integration in Fashion
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-purple-100 sm:text-base">
+                Join Guest Speaker{" "}
+                <strong className="text-amber-200">
+                  Johnson (Oluwagbenga) Aluko
+                </strong>{" "}
+                &amp; Host{" "}
+                <strong className="text-amber-200">
+                  Tomori Toluwase Julihana
+                </strong>{" "}
+                for learning made fun: networking, games, laughter, and
+                positioning your fashion business for profit in 2027!
+                <span className="mt-2 block font-bold text-amber-200">
+                  Physical: ₦10,000 • Online (AI/Tech session): ₦5,000
+                </span>
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/hangout-2027#register-ticket"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 px-7 py-3 text-sm font-extrabold text-zinc-950 shadow-lg transition hover:brightness-105"
+                >
+                  Register &amp; Pay with Paystack
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/hangout-2027"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20"
+                >
+                  View Event &amp; Speaker Details
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <div className="mx-auto max-w-xs overflow-hidden rounded-2xl border-2 border-amber-300/60 shadow-2xl">
+                <img
+                  src="/images/hangout-2027/hangout-2027-main.jpg"
+                  alt="JHF Hangout 2027 — AI & Technology Integration in Fashion on January 9, 2027"
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* JHF Fashion Empowerment Initiative: The Next Stitch Banner */}
       <section className="border-b border-purple-100 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

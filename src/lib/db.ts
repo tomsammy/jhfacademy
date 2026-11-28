@@ -116,6 +116,53 @@ export interface UpdateHybridApplicationPatch {
   adminNotes?: string;
 }
 
+export type HangoutTicketType = "physical" | "online";
+
+export type HangoutRegistrationStatus = "paid" | "checked_in" | "archived";
+
+export interface HangoutRegistration {
+  id: number;
+  ticketCode: string;
+  paystackReference: string;
+  fullName: string;
+  phoneNumber: string;
+  whatsappNumber: string;
+  emailAddress: string;
+  city: string;
+  fashionRole: string;
+  questionNote: string;
+  ticketType: HangoutTicketType;
+  amountNaira: number;
+  channel: string;
+  paidAt: string;
+  status: HangoutRegistrationStatus;
+  isStarred: boolean;
+  adminNotes: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateHangoutRegistrationInput {
+  paystackReference: string;
+  fullName: string;
+  phoneNumber: string;
+  whatsappNumber: string;
+  emailAddress: string;
+  city: string;
+  fashionRole: string;
+  questionNote: string;
+  ticketType: HangoutTicketType;
+  amountNaira: number;
+  channel: string;
+  paidAt: string;
+}
+
+export interface UpdateHangoutRegistrationPatch {
+  status?: HangoutRegistrationStatus;
+  isStarred?: boolean;
+  adminNotes?: string;
+}
+
 let schemaInitialized = false;
 let schemaInitPromise: Promise<void> | null = null;
 
@@ -214,6 +261,37 @@ async function ensureSchema() {
       await sql`
         CREATE INDEX IF NOT EXISTS idx_hybrid_apps_status
         ON hybrid_applications (status)
+      `;
+      await sql`
+        CREATE TABLE IF NOT EXISTS hangout_registrations (
+          id SERIAL PRIMARY KEY,
+          ticket_code TEXT NOT NULL UNIQUE,
+          paystack_reference TEXT NOT NULL UNIQUE,
+          full_name TEXT NOT NULL,
+          phone_number TEXT NOT NULL,
+          whatsapp_number TEXT NOT NULL,
+          email_address TEXT DEFAULT '',
+          city TEXT DEFAULT '',
+          fashion_role TEXT DEFAULT '',
+          question_note TEXT DEFAULT '',
+          ticket_type TEXT NOT NULL,
+          amount_naira INTEGER NOT NULL,
+          channel TEXT DEFAULT 'paystack',
+          paid_at TEXT NOT NULL,
+          status TEXT NOT NULL DEFAULT 'paid',
+          is_starred BOOLEAN NOT NULL DEFAULT FALSE,
+          admin_notes TEXT DEFAULT '',
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `;
+      await sql`
+        CREATE INDEX IF NOT EXISTS idx_hangout_created_at
+        ON hangout_registrations (created_at DESC)
+      `;
+      await sql`
+        CREATE INDEX IF NOT EXISTS idx_hangout_ticket_type
+        ON hangout_registrations (ticket_type)
       `;
       schemaInitialized = true;
     })().catch((err) => {
@@ -665,5 +743,239 @@ export async function updateHybridApplication(
   };
   items[idx] = updated;
   await writeLocalHybridStore(items);
+  return updated;
+}
+
+// ============================================================
+// JHF Hangout 2027 Registration Helpers
+// ============================================================
+
+function generateHangoutTicketCode(): string {
+  const token = crypto.randomBytes(3).toString("hex").toUpperCase();
+  return `JHF-H27-${token}`;
+}
+
+function mapHangoutRow(row: Record<string, unknown>): HangoutRegistration {
+  return {
+    id: Number(row.id),
+    ticketCode: String(row.ticket_code ?? ""),
+    paystackReference: String(row.paystack_reference ?? ""),
+    fullName: String(row.full_name ?? ""),
+    phoneNumber: String(row.phone_number ?? ""),
+    whatsappNumber: String(row.whatsapp_number ?? ""),
+    emailAddress: String(row.email_address ?? ""),
+    city: String(row.city ?? ""),
+    fashionRole: String(row.fashion_role ?? ""),
+    questionNote: String(row.question_note ?? ""),
+    ticketType: row.ticket_type === "online" ? "online" : "physical",
+    amountNaira: Number(row.amount_naira ?? 0),
+    channel: String(row.channel ?? "paystack"),
+    paidAt: String(row.paid_at ?? new Date().toISOString()),
+    status: (String(row.status ?? "paid") as HangoutRegistrationStatus) || "paid",
+    isStarred: Boolean(row.is_starred),
+    adminNotes: String(row.admin_notes ?? ""),
+    createdAt: new Date(String(row.created_at ?? new Date())).toISOString(),
+    updatedAt: new Date(String(row.updated_at ?? new Date())).toISOString(),
+  };
+}
+
+const LOCAL_HANGOUT_DB_PATH = path.join(
+  process.cwd(),
+  ".data",
+  "hangout-2027-dev.json"
+);
+
+async function readLocalHangoutStore(): Promise<HangoutRegistration[]> {
+  try {
+    const raw = await fs.readFile(LOCAL_HANGOUT_DB_PATH, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+async function writeLocalHangoutStore(
+  items: HangoutRegistration[]
+): Promise<void> {
+  await fs.mkdir(path.dirname(LOCAL_HANGOUT_DB_PATH), { recursive: true });
+  await fs.writeFile(
+    LOCAL_HANGOUT_DB_PATH,
+    JSON.stringify(items, null, 2),
+    "utf8"
+  );
+}
+
+export async function upsertHangoutRegistration(
+  input: CreateHangoutRegistrationInput
+): Promise<HangoutRegistration> {
+  const mode = getStorageMode();
+  const ticketCode = generateHangoutTicketCode();
+
+  if (mode === "neon") {
+    await ensureSchema();
+    const sql = getSqlClient();
+    const existing = await sql`
+      SELECT * FROM hangout_registrations
+      WHERE paystack_reference = ${input.paystackReference}
+      LIMIT 1
+    `;
+    if (existing.length > 0) {
+      return mapHangoutRow(existing[0] as Record<string, unknown>);
+    }
+
+    const rows = await sql`
+      INSERT INTO hangout_registrations (
+        ticket_code,
+        paystack_reference,
+        full_name,
+        phone_number,
+        whatsapp_number,
+        email_address,
+        city,
+        fashion_role,
+        question_note,
+        ticket_type,
+        amount_naira,
+        channel,
+        paid_at
+      ) VALUES (
+        ${ticketCode},
+        ${input.paystackReference},
+        ${input.fullName},
+        ${input.phoneNumber},
+        ${input.whatsappNumber},
+        ${input.emailAddress},
+        ${input.city},
+        ${input.fashionRole},
+        ${input.questionNote},
+        ${input.ticketType},
+        ${input.amountNaira},
+        ${input.channel},
+        ${input.paidAt}
+      )
+      ON CONFLICT (paystack_reference) DO UPDATE
+      SET paystack_reference = EXCLUDED.paystack_reference
+      RETURNING *
+    `;
+    return mapHangoutRow(rows[0] as Record<string, unknown>);
+  }
+
+  const items = await readLocalHangoutStore();
+  const existing = items.find(
+    (item) => item.paystackReference === input.paystackReference
+  );
+  if (existing) return existing;
+
+  const now = new Date().toISOString();
+  const nextId =
+    items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
+  const created: HangoutRegistration = {
+    id: nextId,
+    ticketCode,
+    paystackReference: input.paystackReference,
+    fullName: input.fullName,
+    phoneNumber: input.phoneNumber,
+    whatsappNumber: input.whatsappNumber,
+    emailAddress: input.emailAddress,
+    city: input.city,
+    fashionRole: input.fashionRole,
+    questionNote: input.questionNote,
+    ticketType: input.ticketType,
+    amountNaira: input.amountNaira,
+    channel: input.channel,
+    paidAt: input.paidAt,
+    status: "paid",
+    isStarred: false,
+    adminNotes: "",
+    createdAt: now,
+    updatedAt: now,
+  };
+  items.unshift(created);
+  await writeLocalHangoutStore(items);
+  return created;
+}
+
+export async function listHangoutRegistrations(): Promise<
+  HangoutRegistration[]
+> {
+  const mode = getStorageMode();
+
+  if (mode === "neon") {
+    await ensureSchema();
+    const sql = getSqlClient();
+    const rows = await sql`
+      SELECT *
+      FROM hangout_registrations
+      ORDER BY created_at DESC
+    `;
+    return rows.map((row) => mapHangoutRow(row as Record<string, unknown>));
+  }
+
+  const items = await readLocalHangoutStore();
+  return [...items].sort(
+    (a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+}
+
+export async function updateHangoutRegistration(
+  id: number,
+  patch: UpdateHangoutRegistrationPatch
+): Promise<HangoutRegistration | null> {
+  const mode = getStorageMode();
+
+  if (mode === "neon") {
+    await ensureSchema();
+    const sql = getSqlClient();
+    const existingRows = await sql`
+      SELECT * FROM hangout_registrations WHERE id = ${id} LIMIT 1
+    `;
+    if (existingRows.length === 0) return null;
+
+    const current = mapHangoutRow(existingRows[0] as Record<string, unknown>);
+    const nextStatus = patch.status ?? current.status;
+    const nextStarred =
+      typeof patch.isStarred === "boolean"
+        ? patch.isStarred
+        : current.isStarred;
+    const nextNotes =
+      typeof patch.adminNotes === "string"
+        ? patch.adminNotes
+        : current.adminNotes;
+
+    const updatedRows = await sql`
+      UPDATE hangout_registrations
+      SET
+        status = ${nextStatus},
+        is_starred = ${nextStarred},
+        admin_notes = ${nextNotes},
+        updated_at = NOW()
+      WHERE id = ${id}
+      RETURNING *
+    `;
+    return mapHangoutRow(updatedRows[0] as Record<string, unknown>);
+  }
+
+  const items = await readLocalHangoutStore();
+  const idx = items.findIndex((item) => item.id === id);
+  if (idx === -1) return null;
+
+  const current = items[idx];
+  const updated: HangoutRegistration = {
+    ...current,
+    status: patch.status ?? current.status,
+    isStarred:
+      typeof patch.isStarred === "boolean"
+        ? patch.isStarred
+        : current.isStarred,
+    adminNotes:
+      typeof patch.adminNotes === "string"
+        ? patch.adminNotes
+        : current.adminNotes,
+    updatedAt: new Date().toISOString(),
+  };
+  items[idx] = updated;
+  await writeLocalHangoutStore(items);
   return updated;
 }

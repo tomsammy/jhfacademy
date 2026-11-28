@@ -25,13 +25,16 @@ import {
   ExternalLink,
   GraduationCap,
   Heart,
+  Sparkles,
 } from "lucide-react";
 import type {
+  HangoutRegistration,
   HybridApplication,
   NextStitchStatus,
   NextStitchStory,
 } from "@/lib/db";
 import { AdminHybridPanel } from "@/components/AdminHybridPanel";
+import { AdminHangoutPanel } from "@/components/AdminHangoutPanel";
 
 const STATUS_META: Record<
   NextStitchStatus,
@@ -102,9 +105,9 @@ export function AdminPortalClient() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  const [activeSection, setActiveSection] = useState<"hybrid" | "next-stitch">(
-    "hybrid"
-  );
+  const [activeSection, setActiveSection] = useState<
+    "hangout" | "hybrid" | "next-stitch"
+  >("hangout");
 
   const [stories, setStories] = useState<NextStitchStory[]>([]);
   const [storageMode, setStorageMode] = useState<string>("");
@@ -114,6 +117,10 @@ export function AdminPortalClient() {
   const [hybridApps, setHybridApps] = useState<HybridApplication[]>([]);
   const [loadingHybrid, setLoadingHybrid] = useState(false);
   const [hybridError, setHybridError] = useState<string | null>(null);
+
+  const [hangoutRegs, setHangoutRegs] = useState<HangoutRegistration[]>([]);
+  const [loadingHangout, setLoadingHangout] = useState(false);
+  const [hangoutError, setHangoutError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -181,6 +188,34 @@ export function AdminPortalClient() {
     }
   }, []);
 
+  const fetchHangoutRegs = useCallback(async () => {
+    setLoadingHangout(true);
+    setHangoutError(null);
+    try {
+      const res = await fetch("/api/admin/hangout", { cache: "no-store" });
+      const data = await res.json();
+      if (res.status === 401) {
+        setAuthenticated(false);
+        return;
+      }
+      if (!res.ok) {
+        setHangoutError(
+          data?.error || "Failed to load JHF Hangout 2027 registrations."
+        );
+        return;
+      }
+      const list = Array.isArray(data.registrations)
+        ? (data.registrations as HangoutRegistration[])
+        : [];
+      setHangoutRegs(list);
+      if (data.storageMode) setStorageMode(data.storageMode);
+    } catch {
+      setHangoutError("Network error loading Hangout 2027 registrations.");
+    } finally {
+      setLoadingHangout(false);
+    }
+  }, []);
+
   useEffect(() => {
     const checkSession = async () => {
       try {
@@ -189,7 +224,11 @@ export function AdminPortalClient() {
         setConfigured(Boolean(data.configured));
         setAuthenticated(Boolean(data.authenticated));
         if (data.authenticated) {
-          await Promise.all([fetchStories(), fetchHybridApps()]);
+          await Promise.all([
+            fetchStories(),
+            fetchHybridApps(),
+            fetchHangoutRegs(),
+          ]);
         }
       } catch {
         setLoginError("Could not reach server.");
@@ -198,7 +237,7 @@ export function AdminPortalClient() {
       }
     };
     checkSession();
-  }, [fetchStories, fetchHybridApps]);
+  }, [fetchStories, fetchHybridApps, fetchHangoutRegs]);
 
   const selectedStory = useMemo(
     () => stories.find((s) => s.id === selectedId) || null,
@@ -230,7 +269,11 @@ export function AdminPortalClient() {
       }
       setPassword("");
       setAuthenticated(true);
-      await Promise.all([fetchStories(), fetchHybridApps()]);
+      await Promise.all([
+        fetchStories(),
+        fetchHybridApps(),
+        fetchHangoutRegs(),
+      ]);
     } catch {
       setLoginError("Network issue signing in.");
     } finally {
@@ -243,6 +286,7 @@ export function AdminPortalClient() {
     setAuthenticated(false);
     setStories([]);
     setHybridApps([]);
+    setHangoutRegs([]);
     setSelectedId(null);
   };
 
@@ -493,7 +537,9 @@ export function AdminPortalClient() {
             </span>
           </div>
           <h1 className="mt-2 font-serif text-2xl font-bold text-zinc-950 sm:text-3xl">
-            {activeSection === "hybrid"
+            {activeSection === "hangout"
+              ? "JHF Hangout 2027 — Paid Guests & Passes"
+              : activeSection === "hybrid"
               ? "Hybrid Training Programme — Applications"
               : "The Next Stitch Initiative — Submissions & Stories"}
           </h1>
@@ -557,6 +603,28 @@ export function AdminPortalClient() {
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
+          onClick={() => setActiveSection("hangout")}
+          className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-bold transition sm:text-sm ${
+            activeSection === "hangout"
+              ? "border-brand-purple bg-brand-purple text-white shadow-md"
+              : "border-purple-200 bg-white text-zinc-700 hover:border-brand-purple hover:text-brand-purple"
+          }`}
+        >
+          <Sparkles className="h-4 w-4 text-brand-gold" />
+          JHF Hangout 2027
+          <span
+            className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${
+              activeSection === "hangout"
+                ? "bg-white/20 text-white"
+                : "bg-brand-lavender text-brand-purple"
+            }`}
+          >
+            {hangoutRegs.length}
+          </span>
+        </button>
+
+        <button
+          type="button"
           onClick={() => setActiveSection("hybrid")}
           className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-bold transition sm:text-sm ${
             activeSection === "hybrid"
@@ -600,7 +668,20 @@ export function AdminPortalClient() {
         </button>
       </div>
 
-      {activeSection === "hybrid" ? (
+      {activeSection === "hangout" ? (
+        <AdminHangoutPanel
+          registrations={hangoutRegs}
+          loading={loadingHangout}
+          error={hangoutError}
+          onRefresh={fetchHangoutRegs}
+          onUpdated={(updated) =>
+            setHangoutRegs((prev) =>
+              prev.map((item) => (item.id === updated.id ? updated : item))
+            )
+          }
+          onError={(msg) => setHangoutError(msg)}
+        />
+      ) : activeSection === "hybrid" ? (
         <AdminHybridPanel
           applications={hybridApps}
           loading={loadingHybrid}

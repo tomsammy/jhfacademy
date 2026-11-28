@@ -35,6 +35,12 @@ export function Navbar() {
             Admissions Open • Reg: {ADDITIONAL_FEES.registrationFormatted}
           </span>
           <Link
+            href="/hangout-2027"
+            className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-fuchsia-600 to-amber-500 px-3 py-0.5 text-xs font-extrabold text-white shadow-sm transition hover:brightness-110"
+          >
+            JHF Hangout 2027 (Jan 9) →
+          </Link>
+          <Link
             href="/next-stitch"
             className="inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-brand-gold transition hover:bg-white/20"
           >
@@ -133,6 +139,17 @@ export function Navbar() {
                 </Link>
               );
             })}
+            <Link
+              href="/hangout-2027"
+              onClick={() => setMobileOpen(false)}
+              className={`rounded-lg px-3 py-2.5 text-sm font-bold ${
+                pathname === "/hangout-2027"
+                  ? "bg-brand-lavender text-brand-purple"
+                  : "text-fuchsia-700 hover:bg-purple-50"
+              }`}
+            >
+              JHF Hangout 2027 (Jan 9 • AI &amp; Tech)
+            </Link>
             <Link
               href="/next-stitch"
               onClick={() => setMobileOpen(false)}

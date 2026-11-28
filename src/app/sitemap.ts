@@ -5,6 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "",
     "/academy",
+    "/hangout-2027",
     "/hybrid",
     "/next-stitch",
     "/register",
@@ -21,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency:
       route === "" ||
       route === "/academy" ||
+      route === "/hangout-2027" ||
       route === "/hybrid" ||
       route === "/next-stitch"
         ? "weekly"
@@ -30,7 +32,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
         ? 1
         : route === "/academy"
         ? 0.95
-        : route === "/hybrid" || route === "/next-stitch"
+        : route === "/hangout-2027" ||
+          route === "/hybrid" ||
+          route === "/next-stitch"
         ? 0.9
         : 0.85,
   }));

@@ -123,6 +123,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/hangout-2027"
+                  className="font-bold text-amber-300 hover:underline"
+                >
+                  JHF Hangout 2027 (Jan 9 Event)
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/next-stitch"
                   className="font-semibold text-brand-gold hover:underline"
                 >
