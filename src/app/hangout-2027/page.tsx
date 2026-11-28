@@ -280,9 +280,9 @@ export default function Hangout2027Page() {
             <div className="overflow-hidden rounded-3xl border-2 border-amber-200 bg-gradient-to-br from-amber-50/70 via-white to-fuchsia-50/70 p-6 shadow-md sm:p-8 lg:col-span-5">
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center lg:flex-col lg:items-start">
                 <div className="flex items-center gap-4">
-                  <div className="h-24 w-24 shrink-0 overflow-hidden rounded-2xl border-4 border-white shadow-lg">
+                  <div className="aspect-[4/5] w-28 shrink-0 overflow-hidden rounded-2xl border-4 border-white shadow-lg">
                     <img
-                      src="/images/editorial/director-navy-closeup-portrait.jpg"
+                      src="/images/hangout-2027/host-tomori-julihana.jpg"
                       alt="Tomori Toluwase Julihana — Host of JHF Hangout 2027"
                       className="h-full w-full object-cover object-top"
                     />
