@@ -31,6 +31,10 @@ const HANGOUT_STATUS_META: Record<
   HangoutRegistrationStatus,
   { label: string; badgeClass: string }
 > = {
+  pending_payment: {
+    label: "Pending Payment",
+    badgeClass: "bg-amber-100 text-amber-800 border-amber-200",
+  },
   paid: {
     label: "Paid",
     badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-200",
@@ -60,7 +64,8 @@ function toHangoutWhatsAppHref(
   phone: string,
   fullName: string,
   ticketType: "physical" | "online",
-  ticketCode: string
+  ticketCode: string,
+  status: HangoutRegistrationStatus
 ): string {
   const digits = phone.replace(/\D/g, "");
   const normalized = digits.startsWith("0")
@@ -68,11 +73,16 @@ function toHangoutWhatsAppHref(
     : digits.startsWith("234")
     ? digits
     : `234${digits}`;
-  const msg = encodeURIComponent(
-    `Hello ${fullName}! This is Julian House of Fashion regarding your JHF Hangout 2027 ${
-      ticketType === "physical" ? "Physical (Ilorin)" : "Online"
-    } pass (${ticketCode}) for Saturday, January 9, 2027.`
-  );
+  const passLabel =
+    ticketType === "physical" ? "Physical (₦10,000)" : "Online (₦5,000)";
+  const msg =
+    status === "pending_payment"
+      ? encodeURIComponent(
+          `Hello ${fullName}! Thank you for registering your details for JHF Hangout 2027 (${passLabel}) on Saturday, January 9, 2027. We noticed you haven't completed checkout yet — let us know if you need help finalizing your spot!`
+        )
+      : encodeURIComponent(
+          `Hello ${fullName}! This is Julian House of Fashion regarding your JHF Hangout 2027 ${passLabel} pass (${ticketCode}) for Saturday, January 9, 2027.`
+        );
   return `https://wa.me/${normalized}?text=${msg}`;
 }
 
@@ -99,7 +109,7 @@ export function AdminHangoutPanel({
 }: AdminHangoutPanelProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterMode, setFilterMode] = useState<
-    "all" | "physical" | "online" | "checked_in" | "starred"
+    "all" | "pending_payment" | "paid" | "physical" | "online" | "checked_in" | "starred"
   >("all");
   const [selectedId, setSelectedId] = useState<number | null>(
     registrations.length > 0 ? registrations[0].id : null
@@ -175,6 +185,14 @@ export function AdminHangoutPanel({
   const filteredRegistrations = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return registrations.filter((item) => {
+      if (filterMode === "pending_payment" && item.status !== "pending_payment")
+        return false;
+      if (
+        filterMode === "paid" &&
+        item.status !== "paid" &&
+        item.status !== "checked_in"
+      )
+        return false;
       if (filterMode === "physical" && item.ticketType !== "physical")
         return false;
       if (filterMode === "online" && item.ticketType !== "online") return false;
@@ -200,24 +218,27 @@ export function AdminHangoutPanel({
   }, [registrations, searchQuery, filterMode]);
 
   const counts = useMemo(() => {
+    const paidRows = registrations.filter(
+      (r) => r.status === "paid" || r.status === "checked_in"
+    );
+    const prospectCount = registrations.filter(
+      (r) => r.status === "pending_payment"
+    ).length;
     const physicalCount = registrations.filter(
       (r) => r.ticketType === "physical"
     ).length;
     const onlineCount = registrations.filter(
       (r) => r.ticketType === "online"
     ).length;
-    const checkedInCount = registrations.filter(
-      (r) => r.status === "checked_in"
-    ).length;
-    const totalRevenue = registrations.reduce(
+    const totalRevenue = paidRows.reduce(
       (sum, r) => sum + Number(r.amountNaira || 0),
       0
     );
     return {
-      total: registrations.length,
+      paidCount: paidRows.length,
+      prospectCount,
       physicalCount,
       onlineCount,
-      checkedInCount,
       totalRevenue,
     };
   }, [registrations]);
@@ -277,14 +298,14 @@ export function AdminHangoutPanel({
       <div className="flex flex-col justify-between gap-3 rounded-2xl border border-purple-100 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
         <div>
           <h2 className="font-serif text-xl font-bold text-zinc-950 sm:text-2xl">
-            JHF Hangout 2027 — Registered &amp; Paid Guests
+            JHF Hangout 2027 — Prospects &amp; Paid Guests
           </h2>
           <p className="text-xs text-zinc-500">
-            Attendees from{" "}
+            All prospects &amp; confirmed guests from{" "}
             <span className="font-mono font-semibold text-brand-purple">
               /hangout-2027
             </span>{" "}
-            • Saturday, January 9, 2027 (Physical ₦10,000 / Online ₦5,000)
+            • Follow up unpaid prospects or confirm paid passes
           </p>
         </div>
 
@@ -339,12 +360,20 @@ export function AdminHangoutPanel({
 
       {/* KPI Metrics */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <div className="rounded-2xl border border-purple-100 bg-white p-4 shadow-sm">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 shadow-sm">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
             Paid Guests
           </p>
-          <p className="mt-1 font-serif text-3xl font-bold text-zinc-950">
-            {counts.total}
+          <p className="mt-1 font-serif text-3xl font-bold text-emerald-700">
+            {counts.paidCount}
+          </p>
+        </div>
+        <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-4 shadow-sm">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-amber-800">
+            Prospects (Unpaid)
+          </p>
+          <p className="mt-1 font-serif text-3xl font-bold text-amber-700">
+            {counts.prospectCount}
           </p>
         </div>
         <div className="rounded-2xl border border-fuchsia-200 bg-fuchsia-50/70 p-4 shadow-sm">
@@ -363,19 +392,11 @@ export function AdminHangoutPanel({
             {counts.onlineCount}
           </p>
         </div>
-        <div className="rounded-2xl border border-purple-200 bg-brand-lavender/50 p-4 shadow-sm">
+        <div className="col-span-2 rounded-2xl border border-purple-200 bg-brand-lavender/50 p-4 shadow-sm sm:col-span-1">
           <p className="text-[11px] font-bold uppercase tracking-wider text-brand-purple">
-            Checked In
+            Collected Revenue
           </p>
-          <p className="mt-1 font-serif text-3xl font-bold text-brand-purple">
-            {counts.checkedInCount}
-          </p>
-        </div>
-        <div className="col-span-2 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 shadow-sm sm:col-span-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
-            Total Revenue
-          </p>
-          <p className="mt-1 font-serif text-2xl font-bold text-emerald-700 sm:text-3xl">
+          <p className="mt-1 font-serif text-2xl font-bold text-brand-purple sm:text-3xl">
             ₦{counts.totalRevenue.toLocaleString("en-NG")}
           </p>
         </div>
@@ -404,6 +425,8 @@ export function AdminHangoutPanel({
           {(
             [
               { id: "all", label: "All" },
+              { id: "pending_payment", label: "Prospects (Unpaid)" },
+              { id: "paid", label: "Paid" },
               { id: "physical", label: "Physical (₦10k)" },
               { id: "online", label: "Online (₦5k)" },
               { id: "checked_in", label: "Checked In" },
@@ -434,12 +457,12 @@ export function AdminHangoutPanel({
         <div className="rounded-3xl border border-purple-100 bg-white p-12 text-center shadow-sm">
           <p className="font-serif text-2xl font-bold text-zinc-900">
             {registrations.length === 0
-              ? "No Paid Hangout Registrations Yet"
-              : "No Matching Attendees Found"}
+              ? "No Hangout Leads or Registrations Yet"
+              : "No Matching Prospects or Attendees Found"}
           </p>
           <p className="mt-2 text-sm text-zinc-600">
             {registrations.length === 0
-              ? "Share https://jhfacademy.com.ng/hangout-2027 — every verified Paystack registration appears automatically here."
+              ? "Share https://jhfacademy.com.ng/hangout-2027 — every person who fills the form and clicks Pay appears automatically here (even before payment finishes)."
               : "Try clearing your search input or changing the filter."}
           </p>
         </div>
@@ -619,14 +642,17 @@ export function AdminHangoutPanel({
                           selectedReg.whatsappNumber || selectedReg.phoneNumber,
                           selectedReg.fullName,
                           selectedReg.ticketType,
-                          selectedReg.ticketCode
+                          selectedReg.ticketCode,
+                          selectedReg.status
                         )}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-3 py-1 text-xs font-bold text-white hover:bg-emerald-700"
                       >
                         <MessageCircle className="h-3 w-3" />
-                        Send Venue / Link via WhatsApp
+                        {selectedReg.status === "pending_payment"
+                          ? "Follow Up Prospect (WhatsApp)"
+                          : "Send Venue / Link via WhatsApp"}
                       </a>
                     </div>
                   </div>
@@ -636,9 +662,22 @@ export function AdminHangoutPanel({
                       Payment Details
                     </p>
                     <p>
-                      <span className="text-zinc-500">Amount Paid:</span>{" "}
-                      <strong className="text-emerald-700">
-                        ₦{selectedReg.amountNaira.toLocaleString("en-NG")}
+                      <span className="text-zinc-500">
+                        {selectedReg.status === "pending_payment"
+                          ? "Selected Ticket Fee:"
+                          : "Amount Paid:"}
+                      </span>{" "}
+                      <strong
+                        className={
+                          selectedReg.status === "pending_payment"
+                            ? "text-amber-700"
+                            : "text-emerald-700"
+                        }
+                      >
+                        ₦{selectedReg.amountNaira.toLocaleString("en-NG")}{" "}
+                        {selectedReg.status === "pending_payment"
+                          ? "(Not paid yet)"
+                          : ""}
                       </strong>
                     </p>
                     <p>

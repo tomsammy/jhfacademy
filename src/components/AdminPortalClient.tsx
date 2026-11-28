@@ -538,7 +538,7 @@ export function AdminPortalClient() {
           </div>
           <h1 className="mt-2 font-serif text-2xl font-bold text-zinc-950 sm:text-3xl">
             {activeSection === "hangout"
-              ? "JHF Hangout 2027 — Paid Guests & Passes"
+              ? "JHF Hangout 2027 — Prospects & Paid Guests"
               : activeSection === "hybrid"
               ? "Hybrid Training Programme — Applications"
               : "The Next Stitch Initiative — Submissions & Stories"}

@@ -301,6 +301,21 @@ export function HangoutRegistrationPortal() {
 
       const { reference, authorization_url } = initData.data;
 
+      // Immediately log prospect details into database before opening Paystack modal
+      // so abandoned checkouts are still captured in /admin for follow-up.
+      try {
+        await fetch("/api/hangout/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reference,
+            ...formPayload,
+          }),
+        });
+      } catch {
+        // Non-blocking: do not stop Paystack checkout if lead ping fails
+      }
+
       try {
         localStorage.setItem(PENDING_KEY, JSON.stringify(formPayload));
       } catch {

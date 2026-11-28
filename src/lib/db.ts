@@ -118,7 +118,11 @@ export interface UpdateHybridApplicationPatch {
 
 export type HangoutTicketType = "physical" | "online";
 
-export type HangoutRegistrationStatus = "paid" | "checked_in" | "archived";
+export type HangoutRegistrationStatus =
+  | "pending_payment"
+  | "paid"
+  | "checked_in"
+  | "archived";
 
 export interface HangoutRegistration {
   id: number;
@@ -806,7 +810,7 @@ async function writeLocalHangoutStore(
   );
 }
 
-export async function upsertHangoutRegistration(
+export async function createHangoutProspectLead(
   input: CreateHangoutRegistrationInput
 ): Promise<HangoutRegistration> {
   const mode = getStorageMode();
@@ -815,15 +819,6 @@ export async function upsertHangoutRegistration(
   if (mode === "neon") {
     await ensureSchema();
     const sql = getSqlClient();
-    const existing = await sql`
-      SELECT * FROM hangout_registrations
-      WHERE paystack_reference = ${input.paystackReference}
-      LIMIT 1
-    `;
-    if (existing.length > 0) {
-      return mapHangoutRow(existing[0] as Record<string, unknown>);
-    }
-
     const rows = await sql`
       INSERT INTO hangout_registrations (
         ticket_code,
@@ -838,7 +833,8 @@ export async function upsertHangoutRegistration(
         ticket_type,
         amount_naira,
         channel,
-        paid_at
+        paid_at,
+        status
       ) VALUES (
         ${ticketCode},
         ${input.paystackReference},
@@ -852,20 +848,137 @@ export async function upsertHangoutRegistration(
         ${input.ticketType},
         ${input.amountNaira},
         ${input.channel},
-        ${input.paidAt}
+        ${input.paidAt},
+        'pending_payment'
       )
       ON CONFLICT (paystack_reference) DO UPDATE
-      SET paystack_reference = EXCLUDED.paystack_reference
+      SET
+        full_name = EXCLUDED.full_name,
+        phone_number = EXCLUDED.phone_number,
+        whatsapp_number = EXCLUDED.whatsapp_number,
+        email_address = EXCLUDED.email_address,
+        city = EXCLUDED.city,
+        fashion_role = EXCLUDED.fashion_role,
+        question_note = EXCLUDED.question_note,
+        ticket_type = EXCLUDED.ticket_type,
+        amount_naira = EXCLUDED.amount_naira,
+        updated_at = NOW()
       RETURNING *
     `;
     return mapHangoutRow(rows[0] as Record<string, unknown>);
   }
 
   const items = await readLocalHangoutStore();
-  const existing = items.find(
+  const existingIdx = items.findIndex(
     (item) => item.paystackReference === input.paystackReference
   );
-  if (existing) return existing;
+  if (existingIdx !== -1) {
+    return items[existingIdx];
+  }
+
+  const now = new Date().toISOString();
+  const nextId =
+    items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
+  const created: HangoutRegistration = {
+    id: nextId,
+    ticketCode,
+    paystackReference: input.paystackReference,
+    fullName: input.fullName,
+    phoneNumber: input.phoneNumber,
+    whatsappNumber: input.whatsappNumber,
+    emailAddress: input.emailAddress,
+    city: input.city,
+    fashionRole: input.fashionRole,
+    questionNote: input.questionNote,
+    ticketType: input.ticketType,
+    amountNaira: input.amountNaira,
+    channel: input.channel,
+    paidAt: input.paidAt,
+    status: "pending_payment",
+    isStarred: false,
+    adminNotes: "",
+    createdAt: now,
+    updatedAt: now,
+  };
+  items.unshift(created);
+  await writeLocalHangoutStore(items);
+  return created;
+}
+
+export async function upsertHangoutRegistration(
+  input: CreateHangoutRegistrationInput
+): Promise<HangoutRegistration> {
+  const mode = getStorageMode();
+  const ticketCode = generateHangoutTicketCode();
+
+  if (mode === "neon") {
+    await ensureSchema();
+    const sql = getSqlClient();
+    const rows = await sql`
+      INSERT INTO hangout_registrations (
+        ticket_code,
+        paystack_reference,
+        full_name,
+        phone_number,
+        whatsapp_number,
+        email_address,
+        city,
+        fashion_role,
+        question_note,
+        ticket_type,
+        amount_naira,
+        channel,
+        paid_at,
+        status
+      ) VALUES (
+        ${ticketCode},
+        ${input.paystackReference},
+        ${input.fullName},
+        ${input.phoneNumber},
+        ${input.whatsappNumber},
+        ${input.emailAddress},
+        ${input.city},
+        ${input.fashionRole},
+        ${input.questionNote},
+        ${input.ticketType},
+        ${input.amountNaira},
+        ${input.channel},
+        ${input.paidAt},
+        'paid'
+      )
+      ON CONFLICT (paystack_reference) DO UPDATE
+      SET
+        status = CASE
+          WHEN hangout_registrations.status = 'pending_payment' THEN 'paid'
+          ELSE hangout_registrations.status
+        END,
+        amount_naira = EXCLUDED.amount_naira,
+        channel = EXCLUDED.channel,
+        paid_at = EXCLUDED.paid_at,
+        updated_at = NOW()
+      RETURNING *
+    `;
+    return mapHangoutRow(rows[0] as Record<string, unknown>);
+  }
+
+  const items = await readLocalHangoutStore();
+  const existingIdx = items.findIndex(
+    (item) => item.paystackReference === input.paystackReference
+  );
+  if (existingIdx !== -1) {
+    const existing = items[existingIdx];
+    const upgraded: HangoutRegistration = {
+      ...existing,
+      status: existing.status === "pending_payment" ? "paid" : existing.status,
+      amountNaira: input.amountNaira,
+      channel: input.channel,
+      paidAt: input.paidAt,
+      updatedAt: new Date().toISOString(),
+    };
+    items[existingIdx] = upgraded;
+    await writeLocalHangoutStore(items);
+    return upgraded;
+  }
 
   const now = new Date().toISOString();
   const nextId =

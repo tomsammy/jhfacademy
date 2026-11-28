@@ -8,6 +8,7 @@ import {
 } from "@/lib/db";
 
 const VALID_STATUSES: HangoutRegistrationStatus[] = [
+  "pending_payment",
   "paid",
   "checked_in",
   "archived",
